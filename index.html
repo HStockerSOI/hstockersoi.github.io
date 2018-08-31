@@ -497,7 +497,7 @@ Make sure to keep your credentials safe!  Don't leave them in your source code.
 <p>Base URLs:</p>
 
 <ul>
-<li><a href="https://proview.caqh.org/RosterAPI/api/">https://proview.caqh.org/RosterAPI/api/</a></li>
+<li><a href="https://proview.caqh.org/RosterAPI/api">https://proview.caqh.org/RosterAPI/api</a></li>
 </ul>
 <h1 id='authentication'>Authentication</h1>
 <ul>
@@ -512,12 +512,12 @@ Make sure to keep your credentials safe!  Don't leave them in your source code.
 <p>Code samples</p>
 </blockquote>
 <pre class="highlight shell tab-shell"><code><span class="c"># You can also use wget</span>
-curl -X GET https://proview.caqh.org/RosterAPI/api//ProviderStatus?Product<span class="o">=</span>PV&amp;Caqh_Provider_Id<span class="o">=</span>string&amp;Organization_id<span class="o">=</span>string <span class="se">\</span>
+curl -X GET https://proview.caqh.org/RosterAPI/api/ProviderStatus?Product<span class="o">=</span>PV&amp;Caqh_Provider_Id<span class="o">=</span>string&amp;Organization_id<span class="o">=</span>string <span class="se">\</span>
   -H <span class="s1">'Accept: */*'</span> <span class="se">\</span>
   -H <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
   -H <span class="s1">'authorization: string'</span>
 
-</code></pre><pre class="highlight http tab-http"><code><span class="nf">GET</span> <span class="nn">https://proview.caqh.org/RosterAPI/api//ProviderStatus?Product=PV&amp;Caqh_Provider_Id=string&amp;Organization_id=string</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</code></pre><pre class="highlight http tab-http"><code><span class="nf">GET</span> <span class="nn">https://proview.caqh.org/RosterAPI/api/ProviderStatus?Product=PV&amp;Caqh_Provider_Id=string&amp;Organization_id=string</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="na">Host</span><span class="p">:</span> <span class="s">proview.caqh.org</span>
 
 Accept: */*
@@ -532,7 +532,7 @@ authorization: string
 <span class="p">};</span>
 
 <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
-  <span class="na">url</span><span class="p">:</span> <span class="s1">'https://proview.caqh.org/RosterAPI/api//ProviderStatus'</span><span class="p">,</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s1">'https://proview.caqh.org/RosterAPI/api/ProviderStatus'</span><span class="p">,</span>
   <span class="na">method</span><span class="p">:</span> <span class="s1">'get'</span><span class="p">,</span>
   <span class="na">data</span><span class="p">:</span> <span class="s1">'?Product=PV&amp;Caqh_Provider_Id=string&amp;Organization_id=string'</span><span class="p">,</span>
   <span class="na">headers</span><span class="p">:</span> <span class="nx">headers</span><span class="p">,</span>
@@ -550,7 +550,7 @@ authorization: string
 
 <span class="p">};</span>
 
-<span class="nx">fetch</span><span class="p">(</span><span class="s1">'https://proview.caqh.org/RosterAPI/api//ProviderStatus?Product=PV&amp;Caqh_Provider_Id=string&amp;Organization_id=string'</span><span class="p">,</span>
+<span class="nx">fetch</span><span class="p">(</span><span class="s1">'https://proview.caqh.org/RosterAPI/api/ProviderStatus?Product=PV&amp;Caqh_Provider_Id=string&amp;Organization_id=string'</span><span class="p">,</span>
 <span class="p">{</span>
   <span class="na">method</span><span class="p">:</span> <span class="s1">'GET'</span><span class="p">,</span>
 
@@ -571,7 +571,7 @@ authorization: string
   <span class="s1">'authorization'</span> <span class="o">=&gt;</span> <span class="s1">'string'</span>
 <span class="p">}</span>
 
-<span class="n">result</span> <span class="o">=</span> <span class="no">RestClient</span><span class="p">.</span><span class="nf">get</span> <span class="s1">'https://proview.caqh.org/RosterAPI/api//ProviderStatus'</span><span class="p">,</span>
+<span class="n">result</span> <span class="o">=</span> <span class="no">RestClient</span><span class="p">.</span><span class="nf">get</span> <span class="s1">'https://proview.caqh.org/RosterAPI/api/ProviderStatus'</span><span class="p">,</span>
   <span class="ss">params: </span><span class="p">{</span>
   <span class="s1">'Product'</span> <span class="o">=&gt;</span> <span class="s1">'string'</span><span class="p">,</span>
 <span class="s1">'Caqh_Provider_Id'</span> <span class="o">=&gt;</span> <span class="s1">'string'</span><span class="p">,</span>
@@ -587,13 +587,13 @@ authorization: string
   <span class="s">'authorization'</span><span class="p">:</span> <span class="s">'string'</span>
 <span class="p">}</span>
 
-<span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'https://proview.caqh.org/RosterAPI/api//ProviderStatus'</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'https://proview.caqh.org/RosterAPI/api/ProviderStatus'</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span>
   <span class="s">'Product'</span><span class="p">:</span> <span class="s">'PV'</span><span class="p">,</span>  <span class="s">'Caqh_Provider_Id'</span><span class="p">:</span> <span class="s">'string'</span><span class="p">,</span>  <span class="s">'Organization_id'</span><span class="p">:</span> <span class="s">'string'</span>
 <span class="p">},</span> <span class="n">headers</span> <span class="o">=</span> <span class="n">headers</span><span class="p">)</span>
 
 <span class="k">print</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
 
-</code></pre><pre class="highlight java tab-java"><code><span class="n">URL</span> <span class="n">obj</span> <span class="o">=</span> <span class="k">new</span> <span class="n">URL</span><span class="o">(</span><span class="s">"https://proview.caqh.org/RosterAPI/api//ProviderStatus?Product=PV&amp;Caqh_Provider_Id=string&amp;Organization_id=string"</span><span class="o">);</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="n">URL</span> <span class="n">obj</span> <span class="o">=</span> <span class="k">new</span> <span class="n">URL</span><span class="o">(</span><span class="s">"https://proview.caqh.org/RosterAPI/api/ProviderStatus?Product=PV&amp;Caqh_Provider_Id=string&amp;Organization_id=string"</span><span class="o">);</span>
 <span class="n">HttpURLConnection</span> <span class="n">con</span> <span class="o">=</span> <span class="o">(</span><span class="n">HttpURLConnection</span><span class="o">)</span> <span class="n">obj</span><span class="o">.</span><span class="na">openConnection</span><span class="o">();</span>
 <span class="n">con</span><span class="o">.</span><span class="na">setRequestMethod</span><span class="o">(</span><span class="s">"GET"</span><span class="o">);</span>
 <span class="kt">int</span> <span class="n">responseCode</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="na">getResponseCode</span><span class="o">();</span>
@@ -624,7 +624,7 @@ authorization: string
     </span><span class="p">}</span><span class="x">
 
     </span><span class="n">data</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">bytes</span><span class="o">.</span><span class="n">NewBuffer</span><span class="p">([]</span><span class="kt">byte</span><span class="p">{</span><span class="n">jsonReq</span><span class="p">})</span><span class="x">
-    </span><span class="n">req</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">http</span><span class="o">.</span><span class="n">NewRequest</span><span class="p">(</span><span class="s">"GET"</span><span class="p">,</span><span class="x"> </span><span class="s">"https://proview.caqh.org/RosterAPI/api//ProviderStatus"</span><span class="p">,</span><span class="x"> </span><span class="n">data</span><span class="p">)</span><span class="x">
+    </span><span class="n">req</span><span class="p">,</span><span class="x"> </span><span class="n">err</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="n">http</span><span class="o">.</span><span class="n">NewRequest</span><span class="p">(</span><span class="s">"GET"</span><span class="p">,</span><span class="x"> </span><span class="s">"https://proview.caqh.org/RosterAPI/api/ProviderStatus"</span><span class="p">,</span><span class="x"> </span><span class="n">data</span><span class="p">)</span><span class="x">
     </span><span class="n">req</span><span class="o">.</span><span class="n">Header</span><span class="x"> </span><span class="o">=</span><span class="x"> </span><span class="n">headers</span><span class="x">
 
     </span><span class="n">client</span><span class="x"> </span><span class="o">:=</span><span class="x"> </span><span class="o">&amp;</span><span class="n">http</span><span class="o">.</span><span class="n">Client</span><span class="p">{}</span><span class="x">
