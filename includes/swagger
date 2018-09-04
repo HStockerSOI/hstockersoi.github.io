@@ -1,25 +1,8 @@
-<h1 id="CAQH-ProView-RosterAPI">CAQH ProView RosterAPI v2.1</h1>
-
-<blockquote>
-<p>Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.</p>
-</blockquote>
-
-<p>Base URLs:</p>
-
-<ul>
-<li><a href="https://proview.caqh.org/RosterAPI/api">https://proview.caqh.org/RosterAPI/api</a></li>
-</ul>
-<h1 id='authentication'>Authentication</h1>
-<ul>
-<li>HTTP Authentication, scheme: basic Basic username:password   Encoded base64-encoded (iso-8859-1)</li>
-</ul>
-
-<h1 id="CAQH-ProView-RosterAPI-Default">Default</h1>
-<h2 id='get-providerstatus'>get-providerstatus</h2>
+<h2 id='making-the-request'>Making The Request</h2>
 <p><a id="opIdget-providerstatus"></a></p>
 
 <blockquote>
-<p>Code samples</p>
+<p>Full API Request Sample</p>
 </blockquote>
 <pre class="highlight shell tab-shell"><code><span class="c"># You can also use wget</span>
 curl -X GET https://proview.caqh.org/RosterAPI/api/ProviderStatus?Product<span class="o">=</span>PV&amp;Caqh_Provider_Id<span class="o">=</span>string&amp;Organization_id<span class="o">=</span>string <span class="se">\</span>
@@ -90,18 +73,24 @@ authorization: string
 
 <span class="nb">p</span> <span class="no">JSON</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
-</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span>
-<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="s">'Accept'</span><span class="p">:</span> <span class="s">'*/*'</span><span class="p">,</span>
-  <span class="s">'Content-Type'</span><span class="p">:</span> <span class="s">'application/json'</span><span class="p">,</span>
-  <span class="s">'authorization'</span><span class="p">:</span> <span class="s">'string'</span>
-<span class="p">}</span>
+</code></pre><pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="n">get</span>
 
-<span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'https://proview.caqh.org/RosterAPI/api/ProviderStatus'</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span>
-  <span class="s">'Product'</span><span class="p">:</span> <span class="s">'PV'</span><span class="p">,</span>  <span class="s">'Caqh_Provider_Id'</span><span class="p">:</span> <span class="s">'string'</span><span class="p">,</span>  <span class="s">'Organization_id'</span><span class="p">:</span> <span class="s">'string'</span>
-<span class="p">},</span> <span class="n">headers</span> <span class="o">=</span> <span class="n">headers</span><span class="p">)</span>
+<span class="n">caqh_provider_id</span> <span class="o">=</span> <span class="mi">12345678</span>
+<span class="n">organization_id</span> <span class="o">=</span> <span class="mi">1234</span>
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span> <span class="s">'Product'</span><span class="p">:</span> <span class="s">'PV'</span><span class="p">,</span>  <span class="s">'Caqh_Provider_Id'</span><span class="p">:</span> <span class="n">caqh_provider_id</span><span class="p">,</span>  <span class="s">'Organization_id'</span><span class="p">:</span> <span class="n">organization_id</span><span class="p">}</span>
 
-<span class="k">print</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+<span class="n">username</span> <span class="o">=</span> <span class="s">'username'</span>
+<span class="n">password</span> <span class="o">=</span> <span class="s">'password'</span>
+<span class="n">requestURL</span> <span class="o">=</span> <span class="s">'https://proview-demo.caqh.org/RosterAPI/api/providerstatus'</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="n">requestURL</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="p">,</span> <span class="n">auth</span> <span class="o">=</span> <span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">))</span>
+
+<span class="c">#success response</span>
+<span class="k">if</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">):</span>
+    <span class="k">print</span> <span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+<span class="c">#failure response</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span> 
 
 </code></pre><pre class="highlight java tab-java"><code><span class="n">URL</span> <span class="n">obj</span> <span class="o">=</span> <span class="k">new</span> <span class="n">URL</span><span class="o">(</span><span class="s">"https://proview.caqh.org/RosterAPI/api/ProviderStatus?Product=PV&amp;Caqh_Provider_Id=string&amp;Organization_id=string"</span><span class="o">);</span>
 <span class="n">HttpURLConnection</span> <span class="n">con</span> <span class="o">=</span> <span class="o">(</span><span class="n">HttpURLConnection</span><span class="o">)</span> <span class="n">obj</span><span class="o">.</span><span class="na">openConnection</span><span class="o">();</span>
@@ -147,74 +136,21 @@ authorization: string
 
 <p>The ProView Status Check API web service can be used by Participating Organizations to view the status of providers in CAQH ProView. Before requesting ProView Status Check API access, POs should have a business case and an existing application with which to consume and use the web service. The ProView Status Check API accepts one provider at a time.</p>
 
-<h3 id="get-providerstatus-parameters">Parameters</h3>
-
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>In</th>
-<th>Type</th>
-<th>Required</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>Product</td>
-<td>query</td>
-<td>string</td>
-<td>true</td>
-<td>none</td>
-</tr>
-<tr>
-<td>Caqh_Provider_Id</td>
-<td>query</td>
-<td>string</td>
-<td>true</td>
-<td>none</td>
-</tr>
-<tr>
-<td>Organization_id</td>
-<td>query</td>
-<td>string</td>
-<td>true</td>
-<td>none</td>
-</tr>
-<tr>
-<td>Content-Type</td>
-<td>header</td>
-<td>string</td>
-<td>true</td>
-<td>none</td>
-</tr>
-<tr>
-<td>authorization</td>
-<td>header</td>
-<td>string</td>
-<td>true</td>
-<td>none</td>
-</tr>
-</tbody></table>
-<h4 id='enumerated-values'>Enumerated Values</h4>
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Value</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>Product</td>
-<td>PV</td>
-</tr>
-<tr>
-<td>Content-Type</td>
-<td>application/json</td>
-</tr>
-</tbody></table>
-
 <blockquote>
 <p>Example responses</p>
 
 <p>200 Response</p>
+
+<p>Example Response Body:<br/>
+{<br/>
+    &#39;organization_id&#39;: &#39;1234&#39;, <br/>
+    &#39;caqh_provider_id&#39;: &#39;12345678&#39;,<br/>
+    &#39;roster_status&#39;: &#39;NOT ON ROSTER&#39;, <br/>
+    &#39;provider_status&#39;: &#39;Initial Outreach&#39;, <br/>
+    &#39;provider_status_date&#39;: &#39;20180909&#39;, <br/>
+    &#39;provider_practice_state&#39;: &#39;CO&#39;, <br/>
+    &#39;provider_found_flag&#39;: &#39;Y&#39;<br/>
+}</p>
 </blockquote>
 
 <h3 id="get-providerstatus-responses">Responses</h3>
@@ -230,7 +166,7 @@ authorization: string
 <tr>
 <td>200</td>
 <td><a href="https://tools.ietf.org/html/rfc7231#section-6.3.1">OK</a></td>
-<td>The system will immediately respond with the status of a provider, or indicate that a provider could not be found with Provider_Found_Flag equal to â€œNâ€.</td>
+<td>The system will immediately respond with the status of a provider, or indicate that a provider could not be found with Provider_Found_Flag equal to &#39;N&#39;.</td>
 <td>Inline</td>
 </tr>
 </tbody></table>
@@ -251,91 +187,67 @@ authorization: string
 </tr>
 </thead><tbody>
 <tr>
-<td>Â» Organization_ID</td>
+<td>Organization_ID</td>
 <td>integer(int32)</td>
 <td>false</td>
 <td>none</td>
-<td>Participating Organizationâ€™s Identifier</td>
+<td>Participating Organization&#39;s Identifier</td>
 </tr>
 <tr>
-<td>Â» CAQH_Provider_ID</td>
+<td>CAQH_Provider_ID</td>
 <td>integer(int32)</td>
 <td>false</td>
 <td>none</td>
 <td>The field denotes the CAQH assigned provider Identifier.</td>
 </tr>
 <tr>
-<td>Â» PO_Provider_ID</td>
+<td>PO_Provider_ID</td>
 <td>string</td>
 <td>false</td>
 <td>none</td>
-<td>Providerâ€™s Identifier internal to the Participating Organization</td>
+<td>Provider&#39;s Identifier internal to the Participating Organization</td>
 </tr>
 <tr>
-<td>Â» Roster_Status</td>
+<td>Roster_Status</td>
 <td>string</td>
 <td>false</td>
 <td>none</td>
-<td>Status of the provider on the Planâ€™s current roster. Valid Values: â€˜ACTIVEâ€™</td>
+<td>Status of the provider on the Plan&#39;s current roster. Valid Values: &#39;ACTIVE&#39;</td>
 </tr>
 <tr>
-<td>Â» Authorization_Flag</td>
+<td>Authorization_Flag</td>
 <td>string</td>
 <td>false</td>
 <td>none</td>
-<td>A flag that denotes if the provider has authorized the health plan to view data. Valid values are â€˜Yâ€™ and â€˜Nâ€™</td>
+<td>A flag that denotes if the provider has authorized the health plan to view data. Valid values are &#39;Y&#39; and &#39;N&#39;</td>
 </tr>
 <tr>
-<td>Â» Provider_Status</td>
+<td>Provider_Status</td>
 <td>string</td>
 <td>false</td>
 <td>none</td>
 <td>The status of the provider in ProView.</td>
 </tr>
 <tr>
-<td>Â» Provider_Status_Date</td>
+<td>Provider_Status_Date</td>
 <td>string(date)</td>
 <td>false</td>
 <td>none</td>
 <td>Date provider reached the CAQH Provider Status (Format: YYYYMMDD)</td>
 </tr>
 <tr>
-<td>Â» Provider_Practice_State</td>
+<td>Provider_Practice_State</td>
 <td>string</td>
 <td>false</td>
 <td>none</td>
 <td>This is the primary practice state of the provider.</td>
 </tr>
 <tr>
-<td>Â» Provider_Found_Flag</td>
+<td>Provider_Found_Flag</td>
 <td>string</td>
 <td>false</td>
 <td>none</td>
-<td>A flag that denotes if the provider is found in the system. Valid values are â€˜Yâ€™ and â€˜Nâ€™</td>
-</tr>
-</tbody></table>
-<h4 id='enumerated-values-2'>Enumerated Values</h4>
-<table><thead>
-<tr>
-<th>Property</th>
-<th>Value</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>Authorization_Flag</td>
-<td>Y</td>
-</tr>
-<tr>
-<td>Authorization_Flag</td>
-<td>N</td>
-</tr>
-<tr>
-<td>Provider_Found_Flag</td>
-<td>N</td>
-</tr>
-<tr>
-<td>Provider_Found_Flag</td>
-<td>Y</td>
+<td>A flag that denotes if the provider is found in the system. Valid values are &#39;Y&#39; and &#39;N&#39;</td>
 </tr>
 </tbody></table>
 
