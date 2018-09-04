@@ -77,6 +77,7 @@ authorization: string
 
 <span class="n">caqh_provider_id</span> <span class="o">=</span> <span class="mi">12345678</span>
 <span class="n">organization_id</span> <span class="o">=</span> <span class="mi">1234</span>
+
 <span class="n">params</span> <span class="o">=</span> <span class="p">{</span> <span class="s">'Product'</span><span class="p">:</span> <span class="s">'PV'</span><span class="p">,</span>  <span class="s">'Caqh_Provider_Id'</span><span class="p">:</span> <span class="n">caqh_provider_id</span><span class="p">,</span>  <span class="s">'Organization_id'</span><span class="p">:</span> <span class="n">organization_id</span><span class="p">}</span>
 
 <span class="n">username</span> <span class="o">=</span> <span class="s">'username'</span>
@@ -87,7 +88,7 @@ authorization: string
 
 <span class="c">#success response</span>
 <span class="k">if</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">):</span>
-    <span class="k">print</span> <span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
 <span class="c">#failure response</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span> 
@@ -141,18 +142,18 @@ authorization: string
 
 <p>200 Response</p>
 
-<p>Example Response Body:<br/>
-{<br/>
-    &#39;organization_id&#39;: &#39;1234&#39;, <br/>
-    &#39;caqh_provider_id&#39;: &#39;12345678&#39;,<br/>
-    &#39;roster_status&#39;: &#39;NOT ON ROSTER&#39;, <br/>
-    &#39;provider_status&#39;: &#39;Initial Outreach&#39;, <br/>
-    &#39;provider_status_date&#39;: &#39;20180909&#39;, <br/>
-    &#39;provider_practice_state&#39;: &#39;CO&#39;, <br/>
-    &#39;provider_found_flag&#39;: &#39;Y&#39;<br/>
-}</p>
+<p>Example Response Body:</p>
 </blockquote>
-
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="err">'organization_id'</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mi">1234</span><span class="err">'</span><span class="p">,</span><span class="w">
+    </span><span class="err">'caqh_provider_id'</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mi">12345678</span><span class="err">'</span><span class="p">,</span><span class="w">
+    </span><span class="err">'roster_status'</span><span class="p">:</span><span class="w"> </span><span class="err">'NOT</span><span class="w"> </span><span class="err">ON</span><span class="w"> </span><span class="err">ROSTER'</span><span class="p">,</span><span class="w">
+    </span><span class="err">'provider_status'</span><span class="p">:</span><span class="w"> </span><span class="err">'Initial</span><span class="w"> </span><span class="err">Outreach'</span><span class="p">,</span><span class="w">
+    </span><span class="err">'provider_status_date'</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mi">20180909</span><span class="err">'</span><span class="p">,</span><span class="w">
+    </span><span class="err">'provider_practice_state'</span><span class="p">:</span><span class="w"> </span><span class="err">'CO'</span><span class="p">,</span><span class="w">
+    </span><span class="err">'provider_found_flag'</span><span class="p">:</span><span class="w"> </span><span class="err">'Y'</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
 <h3 id="get-providerstatus-responses">Responses</h3>
 
 <table><thead>
@@ -250,8 +251,3 @@ authorization: string
 <td>A flag that denotes if the provider is found in the system. Valid values are &#39;Y&#39; and &#39;N&#39;</td>
 </tr>
 </tbody></table>
-
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-Authorization
-</aside>
