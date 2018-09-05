@@ -467,7 +467,7 @@ authorization: string
 </span></code></pre>
 <p><code>GET /ProviderStatus</code></p>
 
-<p>The ProView Status Check API web service can be used by Participating Organizations to view the status of providers in CAQH ProView. Before requesting ProView Status Check API access, POs should have a business case and an existing application with which to consume and use the web service. The ProView Status Check API accepts one provider at a time.</p>
+<p>the <code>get(</code> call is doing a lot for us here, so let&#39;s break it down.  The first parameter <code>requestURL</code> is the <b>Base URL</b> of the API you are trying to hit.  The next parameter: <code>params = params</code> is setting the parameters of the API call itself.  For this example it will format the URL to be <code>https://proview-demo.caqh.org/RosterAPI/api/providerstatus?Product=PV&amp;Caqh_Provider_Id=12345678&amp;Organization_id=1234</code>.  There should be no parameters already set in the base URL.  Finally the <code>auth</code> parameter takes in the tuple <code>(username, password)</code>.  The requests get function supports basic base 64 encoding by default, which is what is used by CAQH and will automatically be set in the header.  If you have properly filled in your credentials and IDs, you should receive a response as follows:</p>
 
 <blockquote>
 <p>Example responses</p>
