@@ -1,4 +1,7 @@
-<h1 id='status-check-request-get'>Status Check Request <b>[GET]</b></h1><h2 id='getting-started'>Getting Started</h2>
+<h1 id="CAQH-ProView-StatusGet-CAQH-ProView-StatusGet">Status Check Request [GET]</h1>
+
+<h2 id="CAQH-ProView-StatusGet-getting-started">Getting Started</h2>
+
 <p>The ProView Status Check API web service can be used by Participating Organizations to view the status of providers in CAQH ProView. Before requesting ProView Status Check API access, POs should have a business case and an existing application with which to consume and use the web service. The ProView Status Check API accepts one provider at a time.
 To sign-up for the ProView Status Check API service and get authorization, please contact CAQH ProView Support.</p>
 
@@ -13,16 +16,20 @@ To sign-up for the ProView Status Check API service and get authorization, pleas
 <td>https://proview.caqh.org/RosterAPI/api/providerstatus</td>
 </tr>
 </tbody></table>
-<h2 id='get-providerstatus'>GET /ProviderStatus</h2>
+<h2 id='staging-the-data'>Staging The Data</h2>
 <blockquote>
 <p>Create parameters object</p>
 </blockquote>
-<pre class="highlight python tab-python"><code><span class="n">caqh_provider_id</span> <span class="o">=</span> <span class="mi">12345678</span>
+<pre class="highlight python tab-python"><code>
+<span class="n">caqh_provider_id</span> <span class="o">=</span> <span class="mi">12345678</span>
 <span class="n">organization_id</span> <span class="o">=</span> <span class="mi">1234</span>
+<span class="n">product</span> <span class="o">=</span> <span class="s">'PV'</span>
 
-<span class="n">params</span> <span class="o">=</span> <span class="p">{</span> <span class="s">'Product'</span><span class="p">:</span> <span class="s">'PV'</span><span class="p">,</span>  <span class="s">'Caqh_Provider_Id'</span><span class="p">:</span> <span class="n">caqh_provider_id</span><span class="p">,</span>  <span class="s">'Organization_id'</span><span class="p">:</span> <span class="n">organization_id</span> <span class="p">}</span>
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span> <span class="s">'Product'</span><span class="p">:</span> <span class="n">product</span><span class="p">,</span>  <span class="s">'Caqh_Provider_Id'</span><span class="p">:</span> <span class="n">caqh_provider_id</span><span class="p">,</span>  <span class="s">'Organization_id'</span><span class="p">:</span> <span class="n">organization_id</span> <span class="p">}</span>
 
 </code></pre>
+<p>The status endpoint will take your <a href="#proview-and-directassure">product</a>, CAQH Provider Id and the Organization Id that can both be found in the CAQH portal.  For this sample we have assumed you are using the ProView <code>PV</code> product.  These should be passed in to the <a href="#query-parameters">parameters</a> of the request.  The Status endpoint only accepts <code>GET</code> requests which will not contain a request body.</p>
+<h2 id='get-providerstatus'>GET /ProviderStatus</h2>
 <p>A PO can request the status of a provider by submitting a call to the following URL. </p>
 
 <table><thead>
@@ -38,7 +45,7 @@ To sign-up for the ProView Status Check API service and get authorization, pleas
 <td>Product</td>
 <td>String</td>
 <td>2</td>
-<td>This field is your product.  It should be set to <code>PV</code>.</td>
+<td>This field is your product.  It should be set to <code>PV</code> or <code>DA</code>.</td>
 <td>Required</td>
 </tr>
 <tr>
@@ -71,8 +78,9 @@ or you can find it at the following URL: <br/>http://docs.python-requests.org/en
 
 <span class="n">caqh_provider_id</span> <span class="o">=</span> <span class="mi">12345678</span>
 <span class="n">organization_id</span> <span class="o">=</span> <span class="mi">1234</span>
+<span class="n">product</span> <span class="o">=</span> <span class="s">'PV'</span>
 
-<span class="n">params</span> <span class="o">=</span> <span class="p">{</span> <span class="s">'Product'</span><span class="p">:</span> <span class="s">'PV'</span><span class="p">,</span>  <span class="s">'Caqh_Provider_Id'</span><span class="p">:</span> <span class="n">caqh_provider_id</span><span class="p">,</span>  <span class="s">'Organization_id'</span><span class="p">:</span> <span class="n">organization_id</span><span class="p">}</span>
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span> <span class="s">'Product'</span><span class="p">:</span> <span class="n">product</span><span class="p">,</span>  <span class="s">'Caqh_Provider_Id'</span><span class="p">:</span> <span class="n">caqh_provider_id</span><span class="p">,</span>  <span class="s">'Organization_id'</span><span class="p">:</span> <span class="n">organization_id</span> <span class="p">}</span>
 
 <span class="n">username</span> <span class="o">=</span> <span class="s">'username'</span>
 <span class="n">password</span> <span class="o">=</span> <span class="s">'password'</span>
@@ -101,35 +109,45 @@ or you can find it at the following URL: <br/>http://docs.python-requests.org/en
 <span class="n">in</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
 <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">response</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
 
-</code></pre><pre class="highlight csharp tab-csharp"><code><span class="n">package</span> <span class="n">main</span>
+</code></pre><pre class="highlight csharp tab-csharp"><code><span class="k">using</span><span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">HttpClient</span><span class="p">())</span>
+<span class="p">{</span>
+    <span class="c1">// Add an Accept header for JSON format.</span>
+    <span class="n">client</span><span class="p">.</span><span class="n">DefaultRequestHeaders</span><span class="p">.</span><span class="n">Accept</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span>
+    <span class="k">new</span> <span class="nf">MediaTypeWithQualityHeaderValue</span><span class="p">(</span><span class="s">"application/json"</span><span class="p">));</span>
 
-<span class="nf">import</span> <span class="p">(</span>
-       <span class="s">"bytes"</span>
-       <span class="s">"net/http"</span>
-<span class="p">)</span>
+    <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span> <span class="n">parameters</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="kt">string</span><span class="p">&gt;()</span>
+    <span class="p">{</span>
+        <span class="p">{</span><span class="s">"product"</span><span class="p">,</span> <span class="s">"PV"</span><span class="p">}</span>
+    <span class="p">}</span>
+    <span class="kt">var</span> <span class="n">encodedContent</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">FormUrlEncodedContent</span><span class="p">(</span><span class="n">parameters</span><span class="p">);</span>
 
-<span class="n">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-
-    <span class="n">headers</span> <span class="p">:=</span> <span class="n">map</span><span class="p">[</span><span class="kt">string</span><span class="p">][]</span><span class="kt">string</span><span class="p">{</span>
-        <span class="s">"Accept"</span><span class="p">:</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">"*/*"</span><span class="p">},</span>
-        <span class="s">"Content-Type"</span><span class="p">:</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">"application/json"</span><span class="p">},</span>
-        <span class="s">"authorization"</span><span class="p">:</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">"string"</span><span class="p">},</span>
-
+    <span class="c1">// List data response.</span>
+    <span class="n">HttpResponseMessage</span> <span class="n">response</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">PostAsync</span><span class="p">(</span><span class="s">"https://proview-demo.caqh.org/RosterAPI/api/Roster"</span><span class="p">,</span> <span class="n">encodedContent</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>  <span class="c1">// Blocking call! Program will wait here until a response is received or a timeout occurs.</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">IsSuccessStatusCode</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// Parse the response body.</span>
+        <span class="kt">var</span> <span class="n">dataObjects</span> <span class="p">=</span> <span class="n">response</span><span class="p">.</span><span class="n">Content</span><span class="p">.</span><span class="n">ReadAsAsync</span><span class="p">&lt;</span><span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">DataObject</span><span class="p">&gt;&gt;().</span><span class="n">Result</span><span class="p">;</span>  <span class="c1">//Make sure to add a reference to System.Net.Http.Formatting.dll</span>
+        <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">d</span> <span class="k">in</span> <span class="n">dataObjects</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"{0}"</span><span class="p">,</span> <span class="n">d</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"{0} ({1})"</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">response</span><span class="p">.</span><span class="n">StatusCode</span><span class="p">,</span> <span class="n">response</span><span class="p">.</span><span class="n">ReasonPhrase</span><span class="p">);</span>
     <span class="p">}</span>
 
-    <span class="n">data</span> <span class="p">:=</span> <span class="n">bytes</span><span class="p">.</span><span class="nf">NewBuffer</span><span class="p">([]</span><span class="kt">byte</span><span class="p">{</span><span class="n">jsonReq</span><span class="p">})</span>
-    <span class="n">req</span><span class="p">,</span> <span class="n">err</span> <span class="p">:=</span> <span class="n">http</span><span class="p">.</span><span class="nf">NewRequest</span><span class="p">(</span><span class="s">"GET"</span><span class="p">,</span> <span class="s">"https://proview.caqh.org/RosterAPI/api/ProviderStatus"</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
-    <span class="n">req</span><span class="p">.</span><span class="n">Header</span> <span class="p">=</span> <span class="n">headers</span>
+    <span class="c1">//Make any other calls using HttpClient here.</span>
 
-    <span class="n">client</span> <span class="p">:=</span> <span class="p">&amp;</span><span class="n">http</span><span class="p">.</span><span class="n">Client</span><span class="p">{}</span>
-    <span class="n">resp</span><span class="p">,</span> <span class="n">err</span> <span class="p">:=</span> <span class="n">client</span><span class="p">.</span><span class="nf">Do</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
-    <span class="c1">// ...</span>
+    <span class="c1">//HttpClient will automatically be disposed of at the conclusion of the using block</span>
 <span class="p">}</span>
 
 </code></pre>
 <p><code>GET /ProviderStatus</code></p>
 
-<p>the <code>get(</code> call is doing a lot for us here, so let&#39;s break it down.  The first parameter <code>requestURL</code> is the <b>Base URL</b> of the API you are trying to hit.  The next parameter: <code>params = params</code> is setting the parameters of the API call itself.  For this example it will format the URL to be <code>https://proview-demo.caqh.org/RosterAPI/api/providerstatus?Product=PV&amp;Caqh_Provider_Id=12345678&amp;Organization_id=1234</code>.  There should be no parameters already set in the base URL.  Finally the <code>auth</code> parameter takes in the tuple <code>(username, password)</code>.  The requests get function supports basic base 64 encoding by default, which is what is used by CAQH and will automatically be set in the header.  If you have properly filled in your credentials and IDs, you should receive a response as follows:</p>
+<p>the <code>get</code> call is doing a lot for us here, so let&#39;s break it down.  The first parameter <code>requestURL</code> is the <b>Base URL</b> of the API you are trying to hit.  The next parameter: <code>params = params</code> is setting the parameters of the API call itself.  For this example it will format the URL to be <code>https://proview-demo.caqh.org/RosterAPI/api/providerstatus?Product=PV&amp;Caqh_Provider_Id=12345678&amp;Organization_id=1234</code>.  There should be no parameters already set in the base URL.  Finally the <code>auth</code> parameter takes in the tuple <code>(username, password)</code>.  The requests get function supports basic base 64 encoding by default, which is what is used by CAQH and will automatically be set in the header.  If you have properly filled in your credentials and IDs, you should receive a response as follows:</p>
+
+<h2 id="get-providerstatus-responses">Responses</h2>
 
 <blockquote>
 <p>Example responses</p>
@@ -148,8 +166,6 @@ or you can find it at the following URL: <br/>http://docs.python-requests.org/en
     </span><span class="err">'provider_found_flag'</span><span class="p">:</span><span class="w"> </span><span class="err">'Y'</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<h3 id="get-providerstatus-responses">Responses</h3>
-
 <table><thead>
 <tr>
 <th>Status</th>
@@ -245,3 +261,4 @@ or you can find it at the following URL: <br/>http://docs.python-requests.org/en
 <td>A flag that denotes if the provider is found in the system. Valid values are &#39;Y&#39; and &#39;N&#39;</td>
 </tr>
 </tbody></table>
+<h2 id='next-steps'>Next Steps</h2>

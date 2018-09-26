@@ -1,0 +1,1 @@
+var imgModel=document.getElementById("myimgModel"),img=document.getElementById("myImg"),imgModelImg=document.getElementById("img01"),captionText=document.getElementById("caption");img.onclick=function(){imgModel.style.display="block",imgModelImg.src=this.src};var span=document.getElementsByClassName("close")[0];span.onclick=function(){imgModel.style.display="none"};

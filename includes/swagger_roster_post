@@ -1,8 +1,42 @@
-<h1 id="CAQH-ProView-RosterAPI-CAQH-ProView-RosterAPI">Add Roster Request [POST]</h1>
+<h1 id="CAQH-ProView-RosterAPI-CAQH-ProView-RosterAPIGETintro">Get Roster Result [GET]</h1>
 
-<h2 id="CAQH-ProView-RosterAPI-Roster-getting-started">Getting Started</h2>
+<h2 id="CAQH-ProView-RosterAPI-RosterGET-getting-started">Getting Started</h2>
+<pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="n">get</span>
 
-<p>A PO can add one or more providers to the roster by submitting a call to the following URL. Similar to the Add Roster File process, there are different required and optional fields for the Quick Add verses the Initial Add, and at least one of the fields with an asterisk (*) is required to process an Initial Add.</p>
+<span class="n">url</span> <span class="o">=</span> <span class="s">"https://proview-demo.caqh.org/RosterAPI/api/Roster"</span>
+</code></pre><pre class="highlight csharp tab-csharp"><code><span class="c1">//includes</span>
+<span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Text</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Web</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Net.Http</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Net.Http.Headers</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Newtonsoft.Json</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Newtonsoft.Json.Linq</span><span class="p">;</span>
+
+<span class="c1">//base url</span>
+<span class="kt">string</span> <span class="n">url</span> <span class="p">=</span> <span class="s">"https://proview-demo.caqh.org/RosterAPI/api/Roster?"</span><span class="p">;</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">//imports (you will need javax.json and org.apache.httpcomponents)</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.auth.AuthScope</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.auth.UsernamePasswordCredentials</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.CredentialsProvider</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.HttpClient</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.methods.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.utils.URLEncodedUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.entity.StringEntity</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.impl.client.BasicCredentialsProvider</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.impl.client.HttpClientBuilder</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.message.BasicNameValuePair</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.util.EntityUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.json.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.StringReader</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+
+<span class="c1">//base url</span>
+<span class="n">String</span> <span class="n">url</span> <span class="o">=</span> <span class="s">"https://proview-demo.caqh.org/RosterAPI/api/Roster?"</span><span class="o">;</span>
+</code></pre>
+<p>A PO can request the status and results of a previous Add to Roster, Update on Roster, or Delete from Roster request by submitting the system-generated Batch ID in the following URL.</p>
 
 <table><thead>
 <tr>
@@ -11,19 +45,347 @@
 </tr>
 </thead><tbody>
 <tr>
-<td>POST</td>
+<td>GET</td>
 <td>https://proview-demo.caqh.org/RosterAPI/api/Roster</td>
 </tr>
 </tbody></table>
 
-<h2 id="CAQH-ProView-RosterAPI-Roster-api-definition"> POST /Roster</h2>
-
-<h2 id="CAQH-ProView-RosterAPI-Roster-making-request">Making The Request</h2>
+<h2 id="CAQH-ProView-RosterAPI-RosterGET-staging-data">Staging The Data</h2>
 
 <blockquote>
-<p>Code samples</p>
+<p>Create parameters object</p>
 </blockquote>
-<pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="n">post</span>
+
+<p>If you are storing this data in a database and are unsure about how best to retrieve and parse it, please refer to the <a href="#loading-and-parsing-data">data loading and parsing</a> section.</p>
+<pre class="highlight python tab-python"><code><span class="n">batch_id</span> <span class="o">=</span> <span class="s">'string'</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s">"batch_id"</span><span class="p">:</span> <span class="n">batch_id</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight csharp tab-csharp"><code>
+<span class="c1">//setup query parameters</span>
+<span class="kt">var</span> <span class="n">queryString</span> <span class="p">=</span> <span class="n">HttpUtility</span><span class="p">.</span><span class="nf">ParseQueryString</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">);</span>
+<span class="n">queryString</span><span class="p">[</span><span class="s">"batch_id"</span><span class="p">]</span> <span class="p">=</span> <span class="s">"string"</span><span class="p">;</span>
+<span class="c1">//add parameters to base url</span>
+<span class="n">url</span> <span class="p">+=</span> <span class="n">queryString</span><span class="p">.</span><span class="nf">ToString</span><span class="p">();</span>
+
+</code></pre><pre class="highlight java tab-java"><code>
+<span class="n">List</span><span class="o">&lt;</span><span class="n">NameValuePair</span><span class="o">&gt;</span> <span class="n">params</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">NameValuePair</span><span class="o">&gt;();</span>
+<span class="n">params</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">BasicNameValuePair</span><span class="o">(</span><span class="s">"batch_id"</span><span class="o">,</span> <span class="s">"string"</span><span class="o">));</span>
+<span class="n">url</span> <span class="o">+=</span> <span class="n">URLEncodedUtils</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="n">params</span><span class="o">,</span> <span class="s">"UTF-8"</span><span class="o">);</span>
+
+</code></pre>
+<h3 id="CAQH-ProView-RosterAPI-RosterGET-staging-data-parameter">Parameters</h3>
+
+<p>The batch id from a previous create, update or delete request.  The data should be passed in to the <a href="#query-parameters">parameters</a> of the request.</p>
+
+<h2 id="CAQH-ProView-RosterAPI-RosterGET-api-definition"> GET /Roster</h2>
+
+<p>The Roster Operation Result will take a <code>batch_id</code> in its parameters.  This batch id will have been returned to you by a successful <code>POST</code>, <code>PUT</code> or <code>DELETE</code>.  A <code>GET</code> call cannot have a request body.</p>
+
+<h2 id="CAQH-ProView-RosterAPI-RosterGET-making-request">Making The Request</h2>
+
+<blockquote>
+<p>Full API Request</p>
+</blockquote>
+<pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="n">get</span>
+
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s">"Accept"</span><span class="p">:</span> <span class="s">'*/*'</span>
+<span class="p">}</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s">"batch_id"</span><span class="p">:</span> <span class="s">'string'</span>
+<span class="p">}</span>
+
+<span class="n">username</span> <span class="o">=</span> <span class="s">"yourUsername"</span>
+<span class="n">password</span> <span class="o">=</span> <span class="s">"yourPassword"</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s">"https://proview-demo.caqh.org/RosterAPI/api/Roster"</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="p">,</span> <span class="n">headers</span> <span class="o">=</span> <span class="n">headers</span><span class="p">,</span> <span class="n">auth</span> <span class="o">=</span> <span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">))</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">//imports (you will need javax.json and org.apache.httpcomponents)</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.auth.AuthScope</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.auth.UsernamePasswordCredentials</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.CredentialsProvider</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.HttpClient</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.methods.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.utils.URLEncodedUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.entity.StringEntity</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.impl.client.BasicCredentialsProvider</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.impl.client.HttpClientBuilder</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.message.BasicNameValuePair</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.util.EntityUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.json.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.StringReader</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+
+<span class="n">String</span> <span class="n">url</span> <span class="o">=</span> <span class="s">"https://proview-demo.caqh.org/RosterAPI/api/Roster?"</span><span class="o">;</span>
+
+<span class="n">List</span><span class="o">&lt;</span><span class="n">NameValuePair</span><span class="o">&gt;</span> <span class="n">params</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">NameValuePair</span><span class="o">&gt;();</span>
+<span class="n">params</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">BasicNameValuePair</span><span class="o">(</span><span class="s">"batch_id"</span><span class="o">,</span> <span class="s">"string"</span><span class="o">));</span>
+<span class="n">url</span> <span class="o">+=</span> <span class="n">URLEncodedUtils</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="n">params</span><span class="o">,</span> <span class="s">"UTF-8"</span><span class="o">);</span>
+
+<span class="c1">//setup HTTP Auth</span>
+<span class="n">CredentialsProvider</span> <span class="n">provider</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BasicCredentialsProvider</span><span class="o">();</span>
+<span class="n">UsernamePasswordCredentials</span> <span class="n">credentials</span> <span class="o">=</span> <span class="k">new</span> <span class="n">UsernamePasswordCredentials</span><span class="o">(</span><span class="s">"username"</span><span class="o">,</span> <span class="s">"password"</span><span class="o">);</span>
+<span class="n">provider</span><span class="o">.</span><span class="na">setCredentials</span><span class="o">(</span><span class="n">AuthScope</span><span class="o">.</span><span class="na">ANY</span><span class="o">,</span> <span class="n">credentials</span><span class="o">);</span>
+
+<span class="n">HttpClient</span> <span class="n">client</span> <span class="o">=</span> <span class="n">HttpClientBuilder</span><span class="o">.</span><span class="na">create</span><span class="o">().</span><span class="na">setDefaultCredentialsProvider</span><span class="o">(</span><span class="n">provider</span><span class="o">).</span><span class="na">build</span><span class="o">();</span>
+
+<span class="k">try</span>
+<span class="o">{</span>
+        <span class="n">HttpGet</span> <span class="n">request</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HttpGet</span><span class="o">(</span><span class="n">url</span><span class="o">);</span>
+        <span class="n">HttpResponse</span> <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="n">request</span><span class="o">);</span>
+
+        <span class="n">HttpEntity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="na">getEntity</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">responseString</span> <span class="o">=</span> <span class="n">EntityUtils</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">entity</span><span class="o">);</span>
+        <span class="n">JsonReader</span> <span class="n">jsonReader</span> <span class="o">=</span> <span class="n">Json</span><span class="o">.</span><span class="na">createReader</span><span class="o">(</span><span class="k">new</span> <span class="n">StringReader</span><span class="o">(</span><span class="n">responseString</span><span class="o">));</span>
+        <span class="n">JsonObject</span> <span class="n">responseJson</span> <span class="o">=</span> <span class="n">jsonReader</span><span class="o">.</span><span class="na">readObject</span><span class="o">();</span>
+        <span class="n">jsonReader</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+
+<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="o">)</span>
+<span class="o">{</span>
+        <span class="c1">//handle errors here</span>
+<span class="o">}</span>
+
+</code></pre><pre class="highlight csharp tab-csharp"><code><span class="c1">//includes</span>
+<span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Text</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Web</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Net.Http</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Net.Http.Headers</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Newtonsoft.Json</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Newtonsoft.Json.Linq</span><span class="p">;</span>
+
+<span class="c1">//HTTPClient should be instantiated once and re-used in your application</span>
+<span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">HttpClient</span><span class="p">();</span>
+
+<span class="c1">//base url</span>
+<span class="kt">string</span> <span class="n">url</span> <span class="p">=</span> <span class="s">"https://proview-demo.caqh.org/RosterAPI/api/Roster?"</span><span class="p">;</span>
+
+<span class="c1">//setup query parameters</span>
+<span class="kt">var</span> <span class="n">queryString</span> <span class="p">=</span> <span class="n">HttpUtility</span><span class="p">.</span><span class="nf">ParseQueryString</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">);</span>
+<span class="n">queryString</span><span class="p">[</span><span class="s">"batch_id"</span><span class="p">]</span> <span class="p">=</span> <span class="s">"string"</span><span class="p">;</span>
+<span class="c1">//add parameters to base url</span>
+<span class="n">url</span> <span class="p">+=</span> <span class="n">queryString</span><span class="p">.</span><span class="nf">ToString</span><span class="p">();</span>
+
+<span class="c1">//set up HTTP auth (replace username/password with yours)</span>
+<span class="kt">var</span> <span class="n">byteArray</span> <span class="p">=</span> <span class="n">Encoding</span><span class="p">.</span><span class="n">ASCII</span><span class="p">.</span><span class="nf">GetBytes</span><span class="p">(</span><span class="s">"username:password"</span><span class="p">);</span>
+<span class="n">client</span><span class="p">.</span><span class="n">DefaultRequestHeaders</span><span class="p">.</span><span class="n">Authorization</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AuthenticationHeaderValue</span><span class="p">(</span><span class="s">"Basic"</span><span class="p">,</span> <span class="n">Convert</span><span class="p">.</span><span class="nf">ToBase64String</span><span class="p">(</span><span class="n">byteArray</span><span class="p">));</span>
+
+<span class="c1">//Send the GET Request</span>
+<span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">GetAsync</span><span class="p">(</span><span class="n">url</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>
+
+<span class="c1">//get the response message and parse it</span>
+<span class="kt">string</span> <span class="n">resultTxt</span> <span class="p">=</span> <span class="n">result</span><span class="p">.</span><span class="n">Content</span><span class="p">.</span><span class="nf">ReadAsStringAsync</span><span class="p">().</span><span class="n">Result</span><span class="p">;</span>
+<span class="kt">dynamic</span> <span class="n">responseObj</span> <span class="p">=</span> <span class="n">JsonConvert</span><span class="p">.</span><span class="n">DeserializeObject</span><span class="p">&lt;</span><span class="kt">dynamic</span><span class="p">&gt;(</span><span class="n">resultTxt</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">responseObj</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
+
+</code></pre>
+<p><code>GET /Roster</code></p>
+
+<h3 id="get__roster-parameters">Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>batch_id</td>
+<td>query</td>
+<td>string</td>
+<td>true</td>
+</tr>
+</tbody></table>
+
+<h2 id="CAQH-ProView-RosterAPI-RosterGET-responses">Responses</h2>
+
+<blockquote>
+<p>Example responses</p>
+
+<p>200 Response</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="err">'batch_id'</span><span class="p">:</span><span class="err">'string'</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<blockquote>
+<p>400 and 401 Response</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="err">'Message'</span><span class="p">:</span><span class="err">'error'</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre><h3 id='update-response'>Update Response</h3><h3 id='add-response'>Add Response</h3><h3 id='delete-response'>Delete Response</h3>
+<table><thead>
+<tr>
+<th>Status</th>
+<th>Meaning</th>
+<th>Description</th>
+<th>Schema</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>200</td>
+<td><a href="https://tools.ietf.org/html/rfc7231#section-6.3.1">OK</a></td>
+<td>A successful response will return a provider object.</td>
+<td><a href="#schemaresultresponse">ResultResponse</a></td>
+</tr>
+</tbody></table>
+
+<h2 id="CAQH-ProView-RosterAPI-RosterGET-next-step">Next Steps</h2>
+
+<blockquote>
+<p>Parsing the response</p>
+</blockquote>
+<pre class="highlight python tab-python"><code>
+<span class="n">batch_status</span> <span class="o">=</span> <span class="s">""</span>
+<span class="n">batch_time</span> <span class="o">=</span> <span class="s">""</span>
+<span class="n">roster_result</span> <span class="o">=</span> <span class="s">""</span>
+
+<span class="k">if</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_Code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">):</span>
+    <span class="n">batch_status</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s">"batch_status"</span><span class="p">]</span>
+    <span class="n">batch_time</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s">"batch_time"</span><span class="p">]</span>
+    <span class="n">roster_result</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s">"roster_result"</span><span class="p">]</span>
+
+
+</code></pre><pre class="highlight csharp tab-csharp"><code>
+<span class="kt">string</span> <span class="n">batch_status</span> <span class="p">=</span> <span class="s">""</span><span class="p">;</span>
+<span class="kt">string</span> <span class="n">batch_time</span> <span class="p">=</span> <span class="s">""</span><span class="p">;</span>
+<span class="kt">string</span> <span class="n">roster_result</span> <span class="p">=</span> <span class="s">""</span><span class="p">;</span>
+
+<span class="k">if</span> <span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="n">result</span><span class="p">.</span><span class="n">StatusCode</span> <span class="p">==</span> <span class="m">200</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">batch_status</span> <span class="p">=</span> <span class="n">responseObj</span><span class="p">.</span><span class="n">batch_status</span><span class="p">;</span>
+    <span class="n">batch_time</span> <span class="p">=</span> <span class="n">responseObj</span><span class="p">.</span><span class="n">batch_time</span><span class="p">;</span>
+    <span class="n">roster_result</span> <span class="p">=</span> <span class="n">responseObj</span><span class="p">.</span><span class="n">roster_result</span><span class="p">;</span>
+
+<span class="p">}</span>
+
+</code></pre><pre class="highlight java tab-java"><code>
+<span class="n">String</span> <span class="n">batch_status</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+<span class="n">String</span> <span class="n">batch_time</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+<span class="n">String</span> <span class="n">roster_result</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+
+<span class="k">if</span> <span class="o">(</span><span class="n">response</span><span class="o">.</span><span class="na">getStatusLine</span><span class="o">().</span><span class="na">getStatusCode</span><span class="o">()</span> <span class="o">==</span> <span class="mi">200</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="n">batch_status</span> <span class="o">=</span> <span class="n">responseJson</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">"batch_status"</span><span class="o">);</span>
+    <span class="n">batch_time</span> <span class="o">=</span> <span class="n">responseJson</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">"batch_time"</span><span class="o">);</span>
+    <span class="n">roster_result</span> <span class="o">=</span> <span class="n">responseJson</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">"roster_result"</span><span class="o">);</span>
+
+<span class="o">}</span>
+
+</code></pre><h3 id='see-also'>See also:</h3>
+<ul>
+<li><a href="#todo">Update Roster</a></li>
+<li><a href="#todo">Delete Roster</a></li>
+<li><a href="#todo">Roster Quick Add</a></li>
+</ul>
+
+<h1 id="CAQH-ProView-RosterAPI-CAQH-ProView-RosterAPIPUTintro">Update Roster Request [PUT]</h1>
+
+<h2 id="CAQH-ProView-RosterAPI-RosterPUT-getting-started">Getting Started</h2>
+<pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="n">put</span>
+<span class="kn">from</span> <span class="nn">json</span> <span class="kn">import</span> <span class="n">dumps</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s">"https://proview-demo.caqh.org/RosterAPI/api/Roster"</span>
+</code></pre><pre class="highlight csharp tab-csharp"><code><span class="c1">//includes</span>
+<span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Text</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Web</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Net.Http</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Net.Http.Headers</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Newtonsoft.Json</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Newtonsoft.Json.Linq</span><span class="p">;</span>
+
+<span class="c1">//base url</span>
+<span class="kt">string</span> <span class="n">url</span> <span class="p">=</span> <span class="s">"https://proview-demo.caqh.org/RosterAPI/api/Roster?"</span><span class="p">;</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">//imports (you will need javax.json and org.apache.httpcomponents)</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.auth.AuthScope</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.auth.UsernamePasswordCredentials</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.CredentialsProvider</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.HttpClient</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.methods.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.utils.URLEncodedUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.entity.StringEntity</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.impl.client.BasicCredentialsProvider</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.impl.client.HttpClientBuilder</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.message.BasicNameValuePair</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.util.EntityUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.json.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.StringReader</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+
+<span class="c1">//base url</span>
+<span class="n">String</span> <span class="n">url</span> <span class="o">=</span> <span class="s">"https://proview-demo.caqh.org/RosterAPI/api/Roster?"</span><span class="o">;</span>
+</code></pre>
+<p>A PO can update one or more providers on the roster by submitting a call to the following URL. At least one of the fields with an asterisk (*) is required to process an Update. See 2.1.2 for the immediate system response.</p>
+
+<table><thead>
+<tr>
+<th>Method</th>
+<th>URL</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>PUT</td>
+<td>https://proview-demo.caqh.org/RosterAPI/api/Roster</td>
+</tr>
+</tbody></table>
+
+<h2 id="CAQH-ProView-RosterAPI-RosterPUT-staging-data">Staging The Data</h2>
+
+<blockquote>
+<p>Create parameters object</p>
+</blockquote>
+
+<p>If you are storing this data in a database and are unsure about how best to retrieve and parse it, please refer to the <a href="#loading-and-parsing-data">data loading and parsing</a> section.</p>
+<pre class="highlight python tab-python"><code><span class="n">product</span> <span class="o">=</span> <span class="s">'string'</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s">"product"</span><span class="p">:</span> <span class="n">product</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight csharp tab-csharp"><code>
+<span class="c1">//setup query parameters</span>
+<span class="kt">var</span> <span class="n">queryString</span> <span class="p">=</span> <span class="n">HttpUtility</span><span class="p">.</span><span class="nf">ParseQueryString</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">);</span>
+<span class="n">queryString</span><span class="p">[</span><span class="s">"product"</span><span class="p">]</span> <span class="p">=</span> <span class="s">"string"</span><span class="p">;</span>
+<span class="c1">//add parameters to base url</span>
+<span class="n">url</span> <span class="p">+=</span> <span class="n">queryString</span><span class="p">.</span><span class="nf">ToString</span><span class="p">();</span>
+
+</code></pre><pre class="highlight java tab-java"><code>
+<span class="n">List</span><span class="o">&lt;</span><span class="n">NameValuePair</span><span class="o">&gt;</span> <span class="n">params</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">NameValuePair</span><span class="o">&gt;();</span>
+<span class="n">params</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">BasicNameValuePair</span><span class="o">(</span><span class="s">"product"</span><span class="o">,</span> <span class="s">"string"</span><span class="o">));</span>
+<span class="n">url</span> <span class="o">+=</span> <span class="n">URLEncodedUtils</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="n">params</span><span class="o">,</span> <span class="s">"UTF-8"</span><span class="o">);</span>
+
+</code></pre>
+<h3 id="CAQH-ProView-RosterAPI-RosterPUT-staging-data-parameter">Parameters</h3>
+
+<p>Product should be either PV or DA for ProView or DirectAssure.  The data should be passed in to the <a href="#query-parameters">parameters</a> of the request.</p>
+
+<h3 id="CAQH-ProView-RosterAPI-RosterPUT-staging-data-body">Body</h3>
+
+<p>The data should be passed in to the <a href="#request-body">request body</a> of the request.</p>
+
+<h2 id="CAQH-ProView-RosterAPI-RosterPUT-api-definition"> PUT /Roster</h2>
+
+<p>The Update Roster Request takes in an Update Roster object containing a subset of the Roster fields which can be updated.  Keep in mind that this update endpoint takes an array and will reject a request sending a single update object.</p>
+
+<h2 id="CAQH-ProView-RosterAPI-RosterPUT-making-request">Making The Request</h2>
+
+<blockquote>
+<p>Full API Request</p>
+</blockquote>
+<pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="n">put</span>
+<span class="kn">from</span> <span class="nn">json</span> <span class="kn">import</span> <span class="n">dumps</span>
 
 <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
   <span class="s">"Content-Type"</span><span class="p">:</span> <span class="s">'application/json'</span><span class="p">,</span>
@@ -31,119 +393,112 @@
 <span class="p">}</span>
 
 <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="s">"product"</span><span class="p">:</span> <span class="s">'PV'</span>
+  <span class="s">"product"</span><span class="p">:</span> <span class="s">'string'</span>
 <span class="p">}</span>
 
-<span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
- <span class="s">"Provider_First_Name"</span><span class="p">:</span> <span class="s">"string"</span><span class="p">,</span>
- <span class="s">"Provider_Last_Name"</span><span class="p">:</span> <span class="s">"string"</span><span class="p">,</span>
- <span class="s">"Provider_Address1"</span><span class="p">:</span> <span class="s">"string"</span><span class="p">,</span>
- <span class="s">"Provider_Address_City"</span><span class="p">:</span> <span class="s">"string"</span><span class="p">,</span>
- <span class="s">"Provider_Address_State"</span><span class="p">:</span> <span class="s">"string"</span><span class="p">,</span>
- <span class="s">"Provider_Address_Zip"</span><span class="p">:</span> <span class="s">"0"</span><span class="p">,</span>
- <span class="s">"Provider_Practice_State"</span><span class="p">:</span> <span class="s">"string"</span><span class="p">,</span>
- <span class="s">"Provider_Birthdate"</span><span class="p">:</span> <span class="s">"2018-09-11"</span><span class="p">,</span>
- <span class="s">"Provider_Type"</span><span class="p">:</span> <span class="s">"string"</span><span class="p">,</span>
- <span class="s">"Provider_NPI*"</span><span class="p">:</span> <span class="s">"0"</span><span class="p">,</span>
- <span class="s">"Organization_ID"</span><span class="p">:</span> <span class="s">"0"</span>
-<span class="p">}</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span>
+    <span class="s">"organization_id"</span><span class="p">:</span> <span class="s">"string"</span><span class="p">,</span>
+    <span class="s">"caqh_provider_id"</span><span class="p">:</span> <span class="s">"string"</span><span class="p">,</span>
+    <span class="s">"po_provider_id"</span><span class="p">:</span> <span class="s">"string"</span><span class="p">,</span>
+    <span class="s">"last_recredential_date"</span><span class="p">:</span> <span class="s">"string"</span><span class="p">,</span>
+    <span class="s">"next_recredential_date"</span><span class="p">:</span> <span class="s">"string"</span><span class="p">,</span>
+    <span class="s">"delegation_flag"</span><span class="p">:</span> <span class="s">"string"</span><span class="p">,</span>
+    <span class="s">"application_type"</span><span class="p">:</span> <span class="s">"string"</span><span class="p">,</span>
+    <span class="s">"affiliation_flag"</span><span class="p">:</span> <span class="s">"string"</span>
+  <span class="p">}</span>
+<span class="p">]</span>
 
 <span class="n">username</span> <span class="o">=</span> <span class="s">"yourUsername"</span>
 <span class="n">password</span> <span class="o">=</span> <span class="s">"yourPassword"</span>
 
-<span class="n">r</span> <span class="o">=</span> <span class="n">post</span><span class="p">(</span><span class="s">"https://proview-demo.caqh.org/RosterAPI/api/Roster"</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">,</span> <span class="n">headers</span> <span class="o">=</span> <span class="n">headers</span><span class="p">,</span> <span class="n">auth</span> <span class="o">=</span> <span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">))</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">put</span><span class="p">(</span><span class="s">"https://proview-demo.caqh.org/RosterAPI/api/Roster"</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">headers</span> <span class="o">=</span> <span class="n">headers</span><span class="p">,</span> <span class="n">auth</span> <span class="o">=</span> <span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">))</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
 
-</code></pre><pre class="highlight java tab-java"><code><span class="n">URL</span> <span class="n">obj</span> <span class="o">=</span> <span class="k">new</span> <span class="n">URL</span><span class="o">(</span><span class="s">"https://proview-demo.caqh.org/RosterAPI/api/Roster?product=PV"</span><span class="o">);</span>
-<span class="n">HttpURLConnection</span> <span class="n">con</span> <span class="o">=</span> <span class="o">(</span><span class="n">HttpURLConnection</span><span class="o">)</span> <span class="n">obj</span><span class="o">.</span><span class="na">openConnection</span><span class="o">();</span>
-<span class="n">con</span><span class="o">.</span><span class="na">setRequestMethod</span><span class="o">(</span><span class="s">"POST"</span><span class="o">);</span>
-<span class="kt">int</span> <span class="n">responseCode</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="na">getResponseCode</span><span class="o">();</span>
-<span class="n">BufferedReader</span> <span class="n">in</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BufferedReader</span><span class="o">(</span>
-    <span class="k">new</span> <span class="nf">InputStreamReader</span><span class="o">(</span><span class="n">con</span><span class="o">.</span><span class="na">getInputStream</span><span class="o">()));</span>
-<span class="n">String</span> <span class="n">inputLine</span><span class="o">;</span>
-<span class="n">StringBuffer</span> <span class="n">response</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuffer</span><span class="o">();</span>
-<span class="k">while</span> <span class="o">((</span><span class="n">inputLine</span> <span class="o">=</span> <span class="n">in</span><span class="o">.</span><span class="na">readLine</span><span class="o">())</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">response</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">inputLine</span><span class="o">);</span>
-<span class="o">}</span>
-<span class="n">in</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
-<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">response</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">//imports (you will need javax.json and org.apache.httpcomponents)</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.auth.AuthScope</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.auth.UsernamePasswordCredentials</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.CredentialsProvider</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.HttpClient</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.methods.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.utils.URLEncodedUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.entity.StringEntity</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.impl.client.BasicCredentialsProvider</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.impl.client.HttpClientBuilder</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.message.BasicNameValuePair</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.util.EntityUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.json.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.StringReader</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
 
-</code></pre><pre class="highlight csharp tab-csharp"><code><span class="k">using</span><span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">HttpClient</span><span class="p">())</span>
-<span class="p">{</span>
-    <span class="c1">// Add an Accept header for JSON format.</span>
-    <span class="n">client</span><span class="p">.</span><span class="n">DefaultRequestHeaders</span><span class="p">.</span><span class="n">Accept</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span>
-    <span class="k">new</span> <span class="nf">MediaTypeWithQualityHeaderValue</span><span class="p">(</span><span class="s">"application/json"</span><span class="p">));</span>
+<span class="n">String</span> <span class="n">url</span> <span class="o">=</span> <span class="s">"https://proview-demo.caqh.org/RosterAPI/api/Roster?"</span><span class="o">;</span>
 
-    <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span> <span class="k">params</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="kt">string</span><span class="p">&gt;()</span>
-    <span class="p">{</span>
-        <span class="p">{</span><span class="s">"product"</span><span class="p">,</span> <span class="s">"PV"</span><span class="p">}</span>
-    <span class="p">}</span>
-    <span class="kt">var</span> <span class="n">encodedContent</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">FormUrlEncodedContent</span><span class="p">(</span><span class="k">params</span><span class="p">);</span>
+<span class="n">List</span><span class="o">&lt;</span><span class="n">NameValuePair</span><span class="o">&gt;</span> <span class="n">params</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">NameValuePair</span><span class="o">&gt;();</span>
+<span class="n">params</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">BasicNameValuePair</span><span class="o">(</span><span class="s">"product"</span><span class="o">,</span> <span class="s">"string"</span><span class="o">));</span>
+<span class="n">url</span> <span class="o">+=</span> <span class="n">URLEncodedUtils</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="n">params</span><span class="o">,</span> <span class="s">"UTF-8"</span><span class="o">);</span>
 
-    <span class="c1">// List data response.</span>
-    <span class="n">HttpResponseMessage</span> <span class="n">response</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">PostAsync</span><span class="p">(</span><span class="s">"https://proview-demo.caqh.org/RosterAPI/api/Roster"</span><span class="p">,</span> <span class="n">encodedContent</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>  <span class="c1">// Blocking call! Program will wait here until a response is received or a timeout occurs.</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">IsSuccessStatusCode</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="c1">// Parse the response body.</span>
-        <span class="kt">var</span> <span class="n">dataObjects</span> <span class="p">=</span> <span class="n">response</span><span class="p">.</span><span class="n">Content</span><span class="p">.</span><span class="n">ReadAsAsync</span><span class="p">&lt;</span><span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">DataObject</span><span class="p">&gt;&gt;().</span><span class="n">Result</span><span class="p">;</span>  <span class="c1">//Make sure to add a reference to System.Net.Http.Formatting.dll</span>
-        <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">d</span> <span class="k">in</span> <span class="n">dataObjects</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"{0}"</span><span class="p">,</span> <span class="n">d</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-    <span class="p">{</span>
-        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"{0} ({1})"</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">response</span><span class="p">.</span><span class="n">StatusCode</span><span class="p">,</span> <span class="n">response</span><span class="p">.</span><span class="n">ReasonPhrase</span><span class="p">);</span>
-    <span class="p">}</span>
+<span class="c1">//setup HTTP Auth</span>
+<span class="n">CredentialsProvider</span> <span class="n">provider</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BasicCredentialsProvider</span><span class="o">();</span>
+<span class="n">UsernamePasswordCredentials</span> <span class="n">credentials</span> <span class="o">=</span> <span class="k">new</span> <span class="n">UsernamePasswordCredentials</span><span class="o">(</span><span class="s">"username"</span><span class="o">,</span> <span class="s">"password"</span><span class="o">);</span>
+<span class="n">provider</span><span class="o">.</span><span class="na">setCredentials</span><span class="o">(</span><span class="n">AuthScope</span><span class="o">.</span><span class="na">ANY</span><span class="o">,</span> <span class="n">credentials</span><span class="o">);</span>
 
-    <span class="c1">//Make any other calls using HttpClient here.</span>
+<span class="n">HttpClient</span> <span class="n">client</span> <span class="o">=</span> <span class="n">HttpClientBuilder</span><span class="o">.</span><span class="na">create</span><span class="o">().</span><span class="na">setDefaultCredentialsProvider</span><span class="o">(</span><span class="n">provider</span><span class="o">).</span><span class="na">build</span><span class="o">();</span>
 
-    <span class="c1">//HttpClient will automatically be disposed of at the conclusion of the using block</span>
-<span class="p">}</span>
+</code></pre><pre class="highlight csharp tab-csharp"><code><span class="c1">//includes</span>
+<span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Text</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Web</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Net.Http</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Net.Http.Headers</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Newtonsoft.Json</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Newtonsoft.Json.Linq</span><span class="p">;</span>
+
+<span class="c1">//HTTPClient should be instantiated once and re-used in your application</span>
+<span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">HttpClient</span><span class="p">();</span>
+
+<span class="c1">//base url</span>
+<span class="kt">string</span> <span class="n">url</span> <span class="p">=</span> <span class="s">"https://proview-demo.caqh.org/RosterAPI/api/Roster?"</span><span class="p">;</span>
+
+<span class="c1">//setup query parameters</span>
+<span class="kt">var</span> <span class="n">queryString</span> <span class="p">=</span> <span class="n">HttpUtility</span><span class="p">.</span><span class="nf">ParseQueryString</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">);</span>
+<span class="n">queryString</span><span class="p">[</span><span class="s">"product"</span><span class="p">]</span> <span class="p">=</span> <span class="s">"string"</span><span class="p">;</span>
+<span class="c1">//add parameters to base url</span>
+<span class="n">url</span> <span class="p">+=</span> <span class="n">queryString</span><span class="p">.</span><span class="nf">ToString</span><span class="p">();</span>
+
+<span class="c1">//set up HTTP auth (replace username/password with yours)</span>
+<span class="kt">var</span> <span class="n">byteArray</span> <span class="p">=</span> <span class="n">Encoding</span><span class="p">.</span><span class="n">ASCII</span><span class="p">.</span><span class="nf">GetBytes</span><span class="p">(</span><span class="s">"username:password"</span><span class="p">);</span>
+<span class="n">client</span><span class="p">.</span><span class="n">DefaultRequestHeaders</span><span class="p">.</span><span class="n">Authorization</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AuthenticationHeaderValue</span><span class="p">(</span><span class="s">"Basic"</span><span class="p">,</span> <span class="n">Convert</span><span class="p">.</span><span class="nf">ToBase64String</span><span class="p">(</span><span class="n">byteArray</span><span class="p">));</span>
+
+<span class="n">JObject</span> <span class="n">body</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">JObject</span><span class="p">(</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"organization_id"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"caqh_provider_id"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"po_provider_id"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"last_recredential_date"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"next_recredential_date"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"delegation_flag"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"application_type"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"affiliation_flag"</span><span class="p">,</span> <span class="s">""</span><span class="p">));</span>
+
+<span class="c1">//Body is taken as an array, even with only one element</span>
+<span class="n">JArray</span> <span class="n">bodyArray</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">JArray</span><span class="p">(</span><span class="n">body</span><span class="p">);</span>
+<span class="kt">var</span> <span class="n">content</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StringContent</span><span class="p">(</span><span class="n">bodyArray</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(),</span> <span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">,</span> <span class="s">"application/json"</span><span class="p">);</span>
+<span class="n">content</span><span class="p">.</span><span class="n">Headers</span><span class="p">.</span><span class="n">ContentType</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">MediaTypeHeaderValue</span><span class="p">(</span><span class="s">"application/json"</span><span class="p">);</span>
+
+<span class="c1">//Send the PUT Request</span>
+<span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">PutAsync</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">content</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>
+
+<span class="c1">//get the response message and parse it</span>
+<span class="kt">string</span> <span class="n">resultTxt</span> <span class="p">=</span> <span class="n">result</span><span class="p">.</span><span class="n">Content</span><span class="p">.</span><span class="nf">ReadAsStringAsync</span><span class="p">().</span><span class="n">Result</span><span class="p">;</span>
+<span class="kt">dynamic</span> <span class="n">responseObj</span> <span class="p">=</span> <span class="n">JsonConvert</span><span class="p">.</span><span class="n">DeserializeObject</span><span class="p">&lt;</span><span class="kt">dynamic</span><span class="p">&gt;(</span><span class="n">resultTxt</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">responseObj</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
+
 </code></pre>
-<p><code>POST /Roster</code></p>
+<p><code>PUT /Roster</code></p>
 
-<blockquote>
-<p>Body parameter</p>
-</blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"Provider_First_Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Middle_Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Last_Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Name_Suffix"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Address1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Address2"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Address_City"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Address_State"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Address_Zip"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Address_Zip_Extn"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Phone"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Fax"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Practice_State"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Birthdate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-09-11"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_SSN*"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Short_SSN"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_DEA*"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_UPIN*"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Tax_ID"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_NPI*"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_License_State"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_License_Number"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"PO_Provider_ID"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Last_Recredential_Date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-09-11"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Next_Recredential_Date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-09-11"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Delegation_Flag"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Application_Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Affiliation_Flag"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Region_ID"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Organization_ID"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-<h3 id="post__roster-parameters">Parameters</h3>
+<h3 id="put__roster-parameters">Parameters</h3>
 
 <table><thead>
 <tr>
@@ -159,10 +514,371 @@
 <td>string</td>
 <td>true</td>
 </tr>
+</tbody></table>
+
+<h3 id="put__roster-body">Body</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
 <tr>
 <td>body</td>
-<td>body</td>
-<td><a href="#schemaroster">Roster</a></td>
+<td><a href="#schemarosterupdaterequest">RosterUpdateRequest</a></td>
+<td>true</td>
+<td>none</td>
+</tr>
+</tbody></table>
+
+<h2 id="CAQH-ProView-RosterAPI-RosterPUT-responses">Responses</h2>
+
+<blockquote>
+<p>Example responses</p>
+
+<p>200 Response</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="err">'batch_id'</span><span class="p">:</span><span class="err">'string'</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<blockquote>
+<p>400 and 401 Response</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="err">'Message'</span><span class="p">:</span><span class="err">'error'</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>If your request has been formatted correctly, it will return a batch id and a 200 response code.  If not, the response object will have a &quot;Message&quot; field that will contain the error.  </p>
+
+<ul>
+<li>200 Success</li>
+<li>401 Unauthorized</li>
+<li>400 Bad Request</li>
+</ul>
+
+<table><thead>
+<tr>
+<th>Status</th>
+<th>Meaning</th>
+<th>Description</th>
+<th>Schema</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>200</td>
+<td><a href="https://tools.ietf.org/html/rfc7231#section-6.3.1">OK</a></td>
+<td>200 response</td>
+<td><a href="#schemarosterresponse">RosterResponse</a></td>
+</tr>
+</tbody></table>
+
+<h2 id="CAQH-ProView-RosterAPI-RosterPUT-next-step">Next Steps</h2>
+
+<blockquote>
+<p>Parsing the response</p>
+</blockquote>
+<pre class="highlight python tab-python"><code>
+<span class="n">batch_Id</span> <span class="o">=</span> <span class="s">""</span>
+
+<span class="k">if</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_Code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">):</span>
+    <span class="n">batch_Id</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s">"batch_Id"</span><span class="p">]</span>
+
+
+</code></pre><pre class="highlight csharp tab-csharp"><code>
+<span class="kt">string</span> <span class="n">batch_Id</span> <span class="p">=</span> <span class="s">""</span><span class="p">;</span>
+
+<span class="k">if</span> <span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="n">result</span><span class="p">.</span><span class="n">StatusCode</span> <span class="p">==</span> <span class="m">200</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">batch_Id</span> <span class="p">=</span> <span class="n">responseObj</span><span class="p">.</span><span class="n">batch_Id</span><span class="p">;</span>
+
+<span class="p">}</span>
+
+</code></pre><pre class="highlight java tab-java"><code>
+<span class="n">String</span> <span class="n">batch_Id</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+
+<span class="k">if</span> <span class="o">(</span><span class="n">response</span><span class="o">.</span><span class="na">getStatusLine</span><span class="o">().</span><span class="na">getStatusCode</span><span class="o">()</span> <span class="o">==</span> <span class="mi">200</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="n">batch_Id</span> <span class="o">=</span> <span class="n">responseJson</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">"batch_Id"</span><span class="o">);</span>
+
+<span class="o">}</span>
+
+</code></pre><h3 id='see-also-2'>See also:</h3>
+<ul>
+<li><a href="#todo">Update Roster</a></li>
+<li><a href="#todo">Delete Roster</a></li>
+<li><a href="#todo">Roster Quick Add</a></li>
+</ul>
+
+<h1 id="CAQH-ProView-RosterAPI-CAQH-ProView-RosterAPIPOSTintro">Add Roster Request [POST]</h1>
+
+<h2 id="CAQH-ProView-RosterAPI-RosterPOST-getting-started">Getting Started</h2>
+<pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="n">post</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s">"https://proview-demo.caqh.org/RosterAPI/api/Roster"</span>
+</code></pre><pre class="highlight csharp tab-csharp"><code><span class="c1">//includes</span>
+<span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Text</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Web</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Net.Http</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Net.Http.Headers</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Newtonsoft.Json</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Newtonsoft.Json.Linq</span><span class="p">;</span>
+
+<span class="c1">//base url</span>
+<span class="kt">string</span> <span class="n">url</span> <span class="p">=</span> <span class="s">"https://proview-demo.caqh.org/RosterAPI/api/Roster?"</span><span class="p">;</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">//imports (you will need javax.json and org.apache.httpcomponents)</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.auth.AuthScope</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.auth.UsernamePasswordCredentials</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.CredentialsProvider</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.HttpClient</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.methods.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.utils.URLEncodedUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.entity.StringEntity</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.impl.client.BasicCredentialsProvider</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.impl.client.HttpClientBuilder</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.message.BasicNameValuePair</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.util.EntityUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.json.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.StringReader</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+
+<span class="c1">//base url</span>
+<span class="n">String</span> <span class="n">url</span> <span class="o">=</span> <span class="s">"https://proview-demo.caqh.org/RosterAPI/api/Roster?"</span><span class="o">;</span>
+</code></pre>
+<p>A PO can add one or more providers to the roster by submitting a call to the following URL. Similar to the Add Roster File process, there are different required and optional fields for the Quick Add verses the Initial Add, and at least one of the fields with an asterisk (*) is required to process an Initial Add.</p>
+
+<table><thead>
+<tr>
+<th>Method</th>
+<th>URL</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>POST</td>
+<td>https://proview-demo.caqh.org/RosterAPI/api/Roster</td>
+</tr>
+</tbody></table>
+
+<h2 id="CAQH-ProView-RosterAPI-RosterPOST-staging-data">Staging The Data</h2>
+
+<blockquote>
+<p>Create parameters object</p>
+</blockquote>
+
+<p>If you are storing this data in a database and are unsure about how best to retrieve and parse it, please refer to the <a href="#loading-and-parsing-data">data loading and parsing</a> section.</p>
+<pre class="highlight python tab-python"><code><span class="n">product</span> <span class="o">=</span> <span class="s">'PV'</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s">"product"</span><span class="p">:</span> <span class="n">product</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight csharp tab-csharp"><code>
+<span class="c1">//setup query parameters</span>
+<span class="kt">var</span> <span class="n">queryString</span> <span class="p">=</span> <span class="n">HttpUtility</span><span class="p">.</span><span class="nf">ParseQueryString</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">);</span>
+<span class="n">queryString</span><span class="p">[</span><span class="s">"product"</span><span class="p">]</span> <span class="p">=</span> <span class="s">"PV"</span><span class="p">;</span>
+<span class="c1">//add parameters to base url</span>
+<span class="n">url</span> <span class="p">+=</span> <span class="n">queryString</span><span class="p">.</span><span class="nf">ToString</span><span class="p">();</span>
+
+</code></pre><pre class="highlight java tab-java"><code>
+<span class="n">List</span><span class="o">&lt;</span><span class="n">NameValuePair</span><span class="o">&gt;</span> <span class="n">params</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">NameValuePair</span><span class="o">&gt;();</span>
+<span class="n">params</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">BasicNameValuePair</span><span class="o">(</span><span class="s">"product"</span><span class="o">,</span> <span class="s">"PV"</span><span class="o">));</span>
+<span class="n">url</span> <span class="o">+=</span> <span class="n">URLEncodedUtils</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="n">params</span><span class="o">,</span> <span class="s">"UTF-8"</span><span class="o">);</span>
+
+</code></pre>
+<h3 id="CAQH-ProView-RosterAPI-RosterPOST-staging-data-parameter">Parameters</h3>
+
+<p>The status endpoint will take the Product of <code>PV</code> or <code>DA</code>, depending on if you are on ProView or DirectAssure.  The data should be passed in to the <a href="#query-parameters">parameters</a> of the request.</p>
+
+<h2 id="CAQH-ProView-RosterAPI-RosterPOST-api-definition"> POST /Roster</h2>
+
+<p>The body of the Roster Add endpoint can take one or more <a href="#tocSaddrequest">provider add</a> objects.  If you only have one object, the body must still be passed in as an array.  All body fields are passed in as strings, however many of them have a specific format.  Please see the example object for the format that is required.</p>
+
+<h2 id="CAQH-ProView-RosterAPI-RosterPOST-making-request">Making The Request</h2>
+
+<blockquote>
+<p>Full API Request</p>
+</blockquote>
+<pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="n">post</span>
+
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s">"Content-Type"</span><span class="p">:</span> <span class="s">'application/json'</span><span class="p">,</span>
+  <span class="s">"Accept"</span><span class="p">:</span> <span class="s">'*/*'</span>
+<span class="p">}</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s">"product"</span><span class="p">:</span> <span class="s">'PV'</span>
+<span class="p">}</span>
+
+<span class="n">username</span> <span class="o">=</span> <span class="s">"yourUsername"</span>
+<span class="n">password</span> <span class="o">=</span> <span class="s">"yourPassword"</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">post</span><span class="p">(</span><span class="s">"https://proview-demo.caqh.org/RosterAPI/api/Roster"</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="p">,</span> <span class="n">headers</span> <span class="o">=</span> <span class="n">headers</span><span class="p">,</span> <span class="n">auth</span> <span class="o">=</span> <span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">))</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">//imports (you will need javax.json and org.apache.httpcomponents)</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.auth.AuthScope</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.auth.UsernamePasswordCredentials</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.CredentialsProvider</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.HttpClient</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.methods.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.utils.URLEncodedUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.entity.StringEntity</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.impl.client.BasicCredentialsProvider</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.impl.client.HttpClientBuilder</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.message.BasicNameValuePair</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.util.EntityUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.json.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.StringReader</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+
+<span class="n">String</span> <span class="n">url</span> <span class="o">=</span> <span class="s">"https://proview-demo.caqh.org/RosterAPI/api/Roster?"</span><span class="o">;</span>
+
+<span class="n">List</span><span class="o">&lt;</span><span class="n">NameValuePair</span><span class="o">&gt;</span> <span class="n">params</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">NameValuePair</span><span class="o">&gt;();</span>
+<span class="n">params</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">BasicNameValuePair</span><span class="o">(</span><span class="s">"product"</span><span class="o">,</span> <span class="s">"PV"</span><span class="o">));</span>
+<span class="n">url</span> <span class="o">+=</span> <span class="n">URLEncodedUtils</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="n">params</span><span class="o">,</span> <span class="s">"UTF-8"</span><span class="o">);</span>
+
+<span class="c1">//setup HTTP Auth</span>
+<span class="n">CredentialsProvider</span> <span class="n">provider</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BasicCredentialsProvider</span><span class="o">();</span>
+<span class="n">UsernamePasswordCredentials</span> <span class="n">credentials</span> <span class="o">=</span> <span class="k">new</span> <span class="n">UsernamePasswordCredentials</span><span class="o">(</span><span class="s">"username"</span><span class="o">,</span> <span class="s">"password"</span><span class="o">);</span>
+<span class="n">provider</span><span class="o">.</span><span class="na">setCredentials</span><span class="o">(</span><span class="n">AuthScope</span><span class="o">.</span><span class="na">ANY</span><span class="o">,</span> <span class="n">credentials</span><span class="o">);</span>
+
+<span class="n">HttpClient</span> <span class="n">client</span> <span class="o">=</span> <span class="n">HttpClientBuilder</span><span class="o">.</span><span class="na">create</span><span class="o">().</span><span class="na">setDefaultCredentialsProvider</span><span class="o">(</span><span class="n">provider</span><span class="o">).</span><span class="na">build</span><span class="o">();</span>
+
+<span class="cm">/* Body JSON Schema
+false
+*/</span>
+<span class="c1">//build JSON body (match schema above)</span>
+<span class="c1">//Refer to Anatomy of a REST Call/Request Body to see code on composing a specific JSON structure in Java.</span>
+<span class="n">JsonArray</span> <span class="n">body</span> <span class="o">=</span> <span class="n">Json</span><span class="o">.</span><span class="na">createArrayBuilder</span><span class="o">()</span>
+    <span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">Json</span><span class="o">.</span><span class="na">createObjectBuilder</span><span class="o">()</span>
+    <span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"property_1"</span><span class="o">,</span> <span class="n">Json</span><span class="o">.</span><span class="na">createObjectBuilder</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"subproperty_1"</span><span class="o">,</span> <span class="s">""</span><span class="o">)</span>
+        <span class="o">...</span>
+        <span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"subproperty_n"</span><span class="o">,</span> <span class="s">""</span><span class="o">))</span>
+    <span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"property_2"</span><span class="o">,</span> <span class="s">""</span><span class="o">)</span>
+    <span class="o">...</span>
+    <span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"property_n"</span><span class="o">,</span> <span class="s">""</span><span class="o">))</span>
+    <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+
+<span class="k">try</span>
+<span class="o">{</span>
+    <span class="n">HttpPost</span> <span class="n">request</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HttpPost</span><span class="o">(</span><span class="n">url</span><span class="o">);</span>
+    <span class="n">StringEntity</span> <span class="n">bodyParams</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringEntity</span><span class="o">(</span><span class="n">body</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+    <span class="n">request</span><span class="o">.</span><span class="na">addHeader</span><span class="o">(</span><span class="s">"content-type"</span><span class="o">,</span> <span class="s">"application/json"</span><span class="o">);</span>
+    <span class="n">request</span><span class="o">.</span><span class="na">setEntity</span><span class="o">(</span><span class="n">bodyParams</span><span class="o">);</span>
+    <span class="n">HttpResponse</span> <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="n">request</span><span class="o">);</span>
+
+    <span class="n">HttpEntity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="na">getEntity</span><span class="o">();</span>
+    <span class="n">String</span> <span class="n">responseString</span> <span class="o">=</span> <span class="n">EntityUtils</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">entity</span><span class="o">);</span>
+    <span class="n">JsonReader</span> <span class="n">jsonReader</span> <span class="o">=</span> <span class="n">Json</span><span class="o">.</span><span class="na">createReader</span><span class="o">(</span><span class="k">new</span> <span class="n">StringReader</span><span class="o">(</span><span class="n">responseString</span><span class="o">));</span>
+    <span class="n">JsonObject</span> <span class="n">responseJson</span> <span class="o">=</span> <span class="n">jsonReader</span><span class="o">.</span><span class="na">readObject</span><span class="o">();</span>
+    <span class="n">jsonReader</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+
+<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="c1">//handle errors here</span>
+<span class="o">}</span>
+
+</code></pre><pre class="highlight csharp tab-csharp"><code><span class="c1">//includes</span>
+<span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Text</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Web</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Net.Http</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Net.Http.Headers</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Newtonsoft.Json</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Newtonsoft.Json.Linq</span><span class="p">;</span>
+
+<span class="c1">//HTTPClient should be instantiated once and re-used in your application</span>
+<span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">HttpClient</span><span class="p">();</span>
+
+<span class="c1">//base url</span>
+<span class="kt">string</span> <span class="n">url</span> <span class="p">=</span> <span class="s">"https://proview-demo.caqh.org/RosterAPI/api/Roster?"</span><span class="p">;</span>
+
+<span class="c1">//setup query parameters</span>
+<span class="kt">var</span> <span class="n">queryString</span> <span class="p">=</span> <span class="n">HttpUtility</span><span class="p">.</span><span class="nf">ParseQueryString</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">);</span>
+<span class="n">queryString</span><span class="p">[</span><span class="s">"product"</span><span class="p">]</span> <span class="p">=</span> <span class="s">"PV"</span><span class="p">;</span>
+<span class="c1">//add parameters to base url</span>
+<span class="n">url</span> <span class="p">+=</span> <span class="n">queryString</span><span class="p">.</span><span class="nf">ToString</span><span class="p">();</span>
+
+<span class="c1">//set up HTTP auth (replace username/password with yours)</span>
+<span class="kt">var</span> <span class="n">byteArray</span> <span class="p">=</span> <span class="n">Encoding</span><span class="p">.</span><span class="n">ASCII</span><span class="p">.</span><span class="nf">GetBytes</span><span class="p">(</span><span class="s">"username:password"</span><span class="p">);</span>
+<span class="n">client</span><span class="p">.</span><span class="n">DefaultRequestHeaders</span><span class="p">.</span><span class="n">Authorization</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AuthenticationHeaderValue</span><span class="p">(</span><span class="s">"Basic"</span><span class="p">,</span> <span class="n">Convert</span><span class="p">.</span><span class="nf">ToBase64String</span><span class="p">(</span><span class="n">byteArray</span><span class="p">));</span>
+
+<span class="n">JObject</span> <span class="n">body</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">JObject</span><span class="p">(</span>
+<span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"provider"</span><span class="p">,</span> <span class="k">new</span> <span class="nf">JObject</span><span class="p">(</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"first_name"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"middle_name"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"last_name"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"name_suffix"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"gender"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"address1"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"address2"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"city"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"state"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"zip"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"zip_extn"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"phone"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"fax"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"email"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"practice_state"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"birthdate"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"ssn"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"short_ssn"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"dea"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"upin"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"type"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"tax_id"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"npi"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"license_state"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"license_number"</span><span class="p">,</span> <span class="s">""</span><span class="p">))),</span>
+<span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"caqh_provider_id"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+<span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"po_provider_id"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+<span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"last_recredential_date"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+<span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"next_recredential_date"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+<span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"delegation_flag"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+<span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"application_type"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+<span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"affiliation_flag"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+<span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"organization_id"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+<span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"region_id"</span><span class="p">,</span> <span class="s">""</span><span class="p">));</span>
+
+<span class="c1">//Body is taken as an array, even with only one element</span>
+<span class="n">JArray</span> <span class="n">bodyArray</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">JArray</span><span class="p">(</span><span class="n">body</span><span class="p">);</span>
+<span class="kt">var</span> <span class="n">content</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StringContent</span><span class="p">(</span><span class="n">bodyArray</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(),</span> <span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">,</span> <span class="s">"application/json"</span><span class="p">);</span>
+<span class="n">content</span><span class="p">.</span><span class="n">Headers</span><span class="p">.</span><span class="n">ContentType</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">MediaTypeHeaderValue</span><span class="p">(</span><span class="s">"application/json"</span><span class="p">);</span>
+
+<span class="c1">//Send the POST Request</span>
+<span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">PostAsync</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">content</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>
+
+<span class="c1">//get the response message and parse it</span>
+<span class="kt">string</span> <span class="n">resultTxt</span> <span class="p">=</span> <span class="n">result</span><span class="p">.</span><span class="n">Content</span><span class="p">.</span><span class="nf">ReadAsStringAsync</span><span class="p">().</span><span class="n">Result</span><span class="p">;</span>
+<span class="kt">dynamic</span> <span class="n">responseObj</span> <span class="p">=</span> <span class="n">JsonConvert</span><span class="p">.</span><span class="n">DeserializeObject</span><span class="p">&lt;</span><span class="kt">dynamic</span><span class="p">&gt;(</span><span class="n">resultTxt</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">responseObj</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
+
+</code></pre>
+<p><code>POST /Roster</code></p>
+
+<h3 id="roster-post-add-parameters">Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>product</td>
+<td>query</td>
+<td>string</td>
 <td>true</td>
 </tr>
 </tbody></table>
@@ -179,13 +895,25 @@
 </tr>
 </tbody></table>
 
+<h2 id="CAQH-ProView-RosterAPI-RosterPOST-responses">Responses</h2>
+
 <blockquote>
 <p>Example responses</p>
 
 <p>200 Response</p>
 </blockquote>
-
-<h3 id="post__roster-responses">Responses</h3>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="err">'batch_id'</span><span class="p">:</span><span class="err">'string'</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<blockquote>
+<p>400 and 401 Response</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="err">'Message'</span><span class="p">:</span><span class="err">'error'</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>If your request has been formatted correctly, it will return a batch id and a 200 response code.  If not, the response object will have a &quot;Message&quot; field that will contain the error.  Once you get a 200 response, you will want to save the batch id for use in the <a href="#todo">roster operation result</a> call.</p>
 
 <table><thead>
 <tr>
@@ -199,74 +927,451 @@
 <td>200</td>
 <td><a href="https://tools.ietf.org/html/rfc7231#section-6.3.1">OK</a></td>
 <td>The Add to Roster Web Service immediately returns a Response JSON that includes a system-generated unique Batch ID for the request.</td>
-<td>Inline</td>
+<td><a href="#schemarosterresponse">RosterResponse</a></td>
+</tr>
+<tr>
+<td>400</td>
+<td><a href="https://tools.ietf.org/html/rfc7231#section-6.5.1">Bad Request</a></td>
+<td>If there was an error with the request, a 400 status code will be returned with an object that contains the field &quot;Message&quot; with the error.  Please check to make sure your JSON request body is properly formatted.</td>
+<td><a href="#schemarostererrorreponse">RosterErrorReponse</a></td>
+</tr>
+<tr>
+<td>401</td>
+<td><a href="https://tools.ietf.org/html/rfc7235#section-3.1">Unauthorized</a></td>
+<td>If your credentials are incorrect or not authorized to access this endpoint, it will return a 401 status code representing an unauthorized response.  Please double check your credentials and the URL to make sure you&#39;re calling the correct environment.</td>
+<td><a href="#schemarostererrorreponse">RosterErrorReponse</a></td>
 </tr>
 </tbody></table>
 
-<h3 id="post__roster-responseschema">Response Schema</h3>
+<h2 id="CAQH-ProView-RosterAPI-RosterPOST-next-step">Next Steps</h2>
 
-<p>Status Code <strong>200</strong></p>
+<blockquote>
+<p>Parsing the response</p>
+</blockquote>
+<pre class="highlight python tab-python"><code>
+<span class="n">batch_Id</span> <span class="o">=</span> <span class="s">""</span>
+
+<span class="k">if</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_Code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">):</span>
+    <span class="n">batch_Id</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s">"batch_Id"</span><span class="p">]</span>
+
+
+<span class="n">Message</span> <span class="o">=</span> <span class="s">""</span>
+
+<span class="k">if</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_Code</span> <span class="o">==</span> <span class="mi">400</span><span class="p">):</span>
+    <span class="n">Message</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s">"Message"</span><span class="p">]</span>
+
+
+<span class="n">Message</span> <span class="o">=</span> <span class="s">""</span>
+
+<span class="k">if</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_Code</span> <span class="o">==</span> <span class="mi">401</span><span class="p">):</span>
+    <span class="n">Message</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s">"Message"</span><span class="p">]</span>
+
+
+</code></pre><pre class="highlight csharp tab-csharp"><code>
+<span class="kt">string</span> <span class="n">batch_Id</span> <span class="p">=</span> <span class="s">""</span><span class="p">;</span>
+
+<span class="k">if</span> <span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="n">result</span><span class="p">.</span><span class="n">StatusCode</span> <span class="p">==</span> <span class="m">200</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">batch_Id</span> <span class="p">=</span> <span class="n">responseObj</span><span class="p">.</span><span class="n">batch_Id</span><span class="p">;</span>
+
+<span class="p">}</span>
+
+<span class="kt">string</span> <span class="n">Message</span> <span class="p">=</span> <span class="s">""</span><span class="p">;</span>
+
+<span class="k">if</span> <span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="n">result</span><span class="p">.</span><span class="n">StatusCode</span> <span class="p">==</span> <span class="m">400</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Message</span> <span class="p">=</span> <span class="n">responseObj</span><span class="p">.</span><span class="n">Message</span><span class="p">;</span>
+
+<span class="p">}</span>
+
+<span class="kt">string</span> <span class="n">Message</span> <span class="p">=</span> <span class="s">""</span><span class="p">;</span>
+
+<span class="k">if</span> <span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="n">result</span><span class="p">.</span><span class="n">StatusCode</span> <span class="p">==</span> <span class="m">401</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Message</span> <span class="p">=</span> <span class="n">responseObj</span><span class="p">.</span><span class="n">Message</span><span class="p">;</span>
+
+<span class="p">}</span>
+
+</code></pre><pre class="highlight java tab-java"><code>
+<span class="n">String</span> <span class="n">batch_Id</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+
+<span class="k">if</span> <span class="o">(</span><span class="n">response</span><span class="o">.</span><span class="na">getStatusLine</span><span class="o">().</span><span class="na">getStatusCode</span><span class="o">()</span> <span class="o">==</span> <span class="mi">200</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="n">batch_Id</span> <span class="o">=</span> <span class="n">responseJson</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">"batch_Id"</span><span class="o">);</span>
+
+<span class="o">}</span>
+
+<span class="n">String</span> <span class="n">Message</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+
+<span class="k">if</span> <span class="o">(</span><span class="n">response</span><span class="o">.</span><span class="na">getStatusLine</span><span class="o">().</span><span class="na">getStatusCode</span><span class="o">()</span> <span class="o">==</span> <span class="mi">400</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="n">Message</span> <span class="o">=</span> <span class="n">responseJson</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">"Message"</span><span class="o">);</span>
+
+<span class="o">}</span>
+
+<span class="n">String</span> <span class="n">Message</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+
+<span class="k">if</span> <span class="o">(</span><span class="n">response</span><span class="o">.</span><span class="na">getStatusLine</span><span class="o">().</span><span class="na">getStatusCode</span><span class="o">()</span> <span class="o">==</span> <span class="mi">401</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="n">Message</span> <span class="o">=</span> <span class="n">responseJson</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">"Message"</span><span class="o">);</span>
+
+<span class="o">}</span>
+
+</code></pre>
+<p>You will receive a <a href="#tocSaddresponse">batch id</a> which should be passed in to the <a href="#todo">roster operation result</a> periodically to check if the operation has been processed.  </p>
+<h3 id='see-also-3'>See also:</h3>
+<ul>
+<li><a href="#todo">Update Roster</a></li>
+<li><a href="#todo">Delete Roster</a></li>
+<li><a href="#todo">Roster Quick Add</a></li>
+</ul>
+
+<h1 id="CAQH-ProView-RosterAPI-CAQH-ProView-RosterAPIPOSTintro">Roster Delete Request [DELETE]</h1>
+
+<h2 id="CAQH-ProView-RosterAPI-DerosterPOST-getting-started">Getting Started</h2>
+<pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="n">post</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s">"https://proview-demo.caqh.org/RosterAPI/api/Deroster"</span>
+</code></pre><pre class="highlight csharp tab-csharp"><code><span class="c1">//includes</span>
+<span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Text</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Web</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Net.Http</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Net.Http.Headers</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Newtonsoft.Json</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Newtonsoft.Json.Linq</span><span class="p">;</span>
+
+<span class="c1">//base url</span>
+<span class="kt">string</span> <span class="n">url</span> <span class="p">=</span> <span class="s">"https://proview-demo.caqh.org/RosterAPI/api/Deroster?"</span><span class="p">;</span>
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">//imports (you will need javax.json and org.apache.httpcomponents)</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.auth.AuthScope</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.auth.UsernamePasswordCredentials</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.CredentialsProvider</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.HttpClient</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.methods.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.utils.URLEncodedUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.entity.StringEntity</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.impl.client.BasicCredentialsProvider</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.impl.client.HttpClientBuilder</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.message.BasicNameValuePair</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.util.EntityUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.json.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.StringReader</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+
+<span class="c1">//base url</span>
+<span class="n">String</span> <span class="n">url</span> <span class="o">=</span> <span class="s">"https://proview-demo.caqh.org/RosterAPI/api/Deroster?"</span><span class="o">;</span>
+</code></pre>
+<p>A PO can delete one or more providers from the roster by submitting a call to the following URL.</p>
 
 <table><thead>
 <tr>
-<th>Name</th>
-<th>Type</th>
-<th>Required</th>
-<th>Restrictions</th>
-<th>Description</th>
+<th>Method</th>
+<th>URL</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>» Roster_Batch_ID</td>
-<td>string</td>
-<td>false</td>
-<td>none</td>
-<td>System-generated Batch unique identifier</td>
+<td>POST</td>
+<td>https://proview-demo.caqh.org/RosterAPI/api/Deroster</td>
 </tr>
 </tbody></table>
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-Authorization
-</aside>
-<h1 id='schemas'>Schemas</h1>
-<h2 id="tocSroster">Roster</h2>
+<h2 id="CAQH-ProView-RosterAPI-DerosterPOST-staging-data">Staging The Data</h2>
 
-<p><a id="schemaroster"></a></p>
+<blockquote>
+<p>Create parameters object</p>
+</blockquote>
+
+<p>If you are storing this data in a database and are unsure about how best to retrieve and parse it, please refer to the <a href="#loading-and-parsing-data">data loading and parsing</a> section.</p>
+<pre class="highlight python tab-python"><code>
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+<span class="p">}</span>
+</code></pre><pre class="highlight csharp tab-csharp"><code>
+<span class="c1">//This request does not require URL parameters</span>
+
+</code></pre><pre class="highlight java tab-java"><code>
+<span class="c1">//This request does not require URL Parameters</span>
+
+</code></pre>
+<h3 id="CAQH-ProView-RosterAPI-DerosterPOST-staging-data-parameter">Parameters</h3>
+
+<p>The data should be passed in to the <a href="#query-parameters">parameters</a> of the request.</p>
+
+<h2 id="CAQH-ProView-RosterAPI-DerosterPOST-api-definition"> POST /Deroster</h2>
+
+<p>The deroster endpoint will take in an array of objects containing the Organization ID and the CAQH Provider ID.  You will be returned a Batch Id which should be passed into the Roster Result endpoint.</p>
+
+<h2 id="CAQH-ProView-RosterAPI-DerosterPOST-making-request">Making The Request</h2>
+
+<blockquote>
+<p>Full API Request</p>
+</blockquote>
+<pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="n">post</span>
+
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s">"Accept"</span><span class="p">:</span> <span class="s">'*/*'</span>
+<span class="p">}</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+<span class="p">}</span>
+
+<span class="n">username</span> <span class="o">=</span> <span class="s">"yourUsername"</span>
+<span class="n">password</span> <span class="o">=</span> <span class="s">"yourPassword"</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">post</span><span class="p">(</span><span class="s">"https://proview-demo.caqh.org/RosterAPI/api/Deroster"</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="p">,</span> <span class="n">headers</span> <span class="o">=</span> <span class="n">headers</span><span class="p">,</span> <span class="n">auth</span> <span class="o">=</span> <span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">))</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+
+</code></pre><pre class="highlight java tab-java"><code><span class="c1">//imports (you will need javax.json and org.apache.httpcomponents)</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.auth.AuthScope</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.auth.UsernamePasswordCredentials</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.CredentialsProvider</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.HttpClient</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.methods.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.client.utils.URLEncodedUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.entity.StringEntity</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.impl.client.BasicCredentialsProvider</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.impl.client.HttpClientBuilder</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.message.BasicNameValuePair</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.http.util.EntityUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.json.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.StringReader</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+
+<span class="n">String</span> <span class="n">url</span> <span class="o">=</span> <span class="s">"https://proview-demo.caqh.org/RosterAPI/api/Deroster?"</span><span class="o">;</span>
+
+<span class="c1">//setup HTTP Auth</span>
+<span class="n">CredentialsProvider</span> <span class="n">provider</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BasicCredentialsProvider</span><span class="o">();</span>
+<span class="n">UsernamePasswordCredentials</span> <span class="n">credentials</span> <span class="o">=</span> <span class="k">new</span> <span class="n">UsernamePasswordCredentials</span><span class="o">(</span><span class="s">"username"</span><span class="o">,</span> <span class="s">"password"</span><span class="o">);</span>
+<span class="n">provider</span><span class="o">.</span><span class="na">setCredentials</span><span class="o">(</span><span class="n">AuthScope</span><span class="o">.</span><span class="na">ANY</span><span class="o">,</span> <span class="n">credentials</span><span class="o">);</span>
+
+<span class="n">HttpClient</span> <span class="n">client</span> <span class="o">=</span> <span class="n">HttpClientBuilder</span><span class="o">.</span><span class="na">create</span><span class="o">().</span><span class="na">setDefaultCredentialsProvider</span><span class="o">(</span><span class="n">provider</span><span class="o">).</span><span class="na">build</span><span class="o">();</span>
+
+<span class="cm">/* Body JSON Schema
+undefined
+*/</span>
+<span class="c1">//build JSON body (match schema above)</span>
+<span class="c1">//Refer to Anatomy of a REST Call/Request Body to see code on composing a specific JSON structure in Java.</span>
+<span class="n">JsonArray</span> <span class="n">body</span> <span class="o">=</span> <span class="n">Json</span><span class="o">.</span><span class="na">createArrayBuilder</span><span class="o">()</span>
+    <span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">Json</span><span class="o">.</span><span class="na">createObjectBuilder</span><span class="o">()</span>
+    <span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"property_1"</span><span class="o">,</span> <span class="n">Json</span><span class="o">.</span><span class="na">createObjectBuilder</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"subproperty_1"</span><span class="o">,</span> <span class="s">""</span><span class="o">)</span>
+        <span class="o">...</span>
+        <span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"subproperty_n"</span><span class="o">,</span> <span class="s">""</span><span class="o">))</span>
+    <span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"property_2"</span><span class="o">,</span> <span class="s">""</span><span class="o">)</span>
+    <span class="o">...</span>
+    <span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"property_n"</span><span class="o">,</span> <span class="s">""</span><span class="o">))</span>
+    <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+
+<span class="k">try</span>
+<span class="o">{</span>
+    <span class="n">HttpPost</span> <span class="n">request</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HttpPost</span><span class="o">(</span><span class="n">url</span><span class="o">);</span>
+    <span class="n">StringEntity</span> <span class="n">bodyParams</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringEntity</span><span class="o">(</span><span class="n">body</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+    <span class="n">request</span><span class="o">.</span><span class="na">addHeader</span><span class="o">(</span><span class="s">"content-type"</span><span class="o">,</span> <span class="s">"application/json"</span><span class="o">);</span>
+    <span class="n">request</span><span class="o">.</span><span class="na">setEntity</span><span class="o">(</span><span class="n">bodyParams</span><span class="o">);</span>
+    <span class="n">HttpResponse</span> <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="n">request</span><span class="o">);</span>
+
+    <span class="n">HttpEntity</span> <span class="n">entity</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="na">getEntity</span><span class="o">();</span>
+    <span class="n">String</span> <span class="n">responseString</span> <span class="o">=</span> <span class="n">EntityUtils</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">entity</span><span class="o">);</span>
+    <span class="n">JsonReader</span> <span class="n">jsonReader</span> <span class="o">=</span> <span class="n">Json</span><span class="o">.</span><span class="na">createReader</span><span class="o">(</span><span class="k">new</span> <span class="n">StringReader</span><span class="o">(</span><span class="n">responseString</span><span class="o">));</span>
+    <span class="n">JsonObject</span> <span class="n">responseJson</span> <span class="o">=</span> <span class="n">jsonReader</span><span class="o">.</span><span class="na">readObject</span><span class="o">();</span>
+    <span class="n">jsonReader</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+
+<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="c1">//handle errors here</span>
+<span class="o">}</span>
+
+</code></pre><pre class="highlight csharp tab-csharp"><code><span class="c1">//includes</span>
+<span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Text</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Web</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Net.Http</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Net.Http.Headers</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Newtonsoft.Json</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Newtonsoft.Json.Linq</span><span class="p">;</span>
+
+<span class="c1">//HTTPClient should be instantiated once and re-used in your application</span>
+<span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">HttpClient</span><span class="p">();</span>
+
+<span class="c1">//base url</span>
+<span class="kt">string</span> <span class="n">url</span> <span class="p">=</span> <span class="s">"https://proview-demo.caqh.org/RosterAPI/api/Deroster?"</span><span class="p">;</span>
+
+<span class="c1">//set up HTTP auth (replace username/password with yours)</span>
+<span class="kt">var</span> <span class="n">byteArray</span> <span class="p">=</span> <span class="n">Encoding</span><span class="p">.</span><span class="n">ASCII</span><span class="p">.</span><span class="nf">GetBytes</span><span class="p">(</span><span class="s">"username:password"</span><span class="p">);</span>
+<span class="n">client</span><span class="p">.</span><span class="n">DefaultRequestHeaders</span><span class="p">.</span><span class="n">Authorization</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AuthenticationHeaderValue</span><span class="p">(</span><span class="s">"Basic"</span><span class="p">,</span> <span class="n">Convert</span><span class="p">.</span><span class="nf">ToBase64String</span><span class="p">(</span><span class="n">byteArray</span><span class="p">));</span>
+
+<span class="n">JObject</span> <span class="n">body</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">JObject</span><span class="p">(</span>
+<span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"provider"</span><span class="p">,</span> <span class="k">new</span> <span class="nf">JObject</span><span class="p">(</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"first_name"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"middle_name"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"last_name"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"name_suffix"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"gender"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"address1"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"address2"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"city"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"state"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"zip"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"zip_extn"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"phone"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"fax"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"email"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"practice_state"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"birthdate"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"ssn"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"short_ssn"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"dea"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"upin"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"type"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"tax_id"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"npi"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"license_state"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+    <span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"license_number"</span><span class="p">,</span> <span class="s">""</span><span class="p">))),</span>
+<span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"caqh_provider_id"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+<span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"po_provider_id"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+<span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"last_recredential_date"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+<span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"next_recredential_date"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+<span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"delegation_flag"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+<span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"application_type"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+<span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"affiliation_flag"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+<span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"organization_id"</span><span class="p">,</span> <span class="s">""</span><span class="p">),</span>
+<span class="k">new</span> <span class="nf">JProperty</span><span class="p">(</span><span class="s">"region_id"</span><span class="p">,</span> <span class="s">""</span><span class="p">));</span>
+
+<span class="c1">//Body is taken as an array, even with only one element</span>
+<span class="n">JArray</span> <span class="n">bodyArray</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">JArray</span><span class="p">(</span><span class="n">body</span><span class="p">);</span>
+<span class="kt">var</span> <span class="n">content</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StringContent</span><span class="p">(</span><span class="n">bodyArray</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(),</span> <span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">,</span> <span class="s">"application/json"</span><span class="p">);</span>
+<span class="n">content</span><span class="p">.</span><span class="n">Headers</span><span class="p">.</span><span class="n">ContentType</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">MediaTypeHeaderValue</span><span class="p">(</span><span class="s">"application/json"</span><span class="p">);</span>
+
+<span class="c1">//Send the POST Request</span>
+<span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">PostAsync</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">content</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>
+
+<span class="c1">//get the response message and parse it</span>
+<span class="kt">string</span> <span class="n">resultTxt</span> <span class="p">=</span> <span class="n">result</span><span class="p">.</span><span class="n">Content</span><span class="p">.</span><span class="nf">ReadAsStringAsync</span><span class="p">().</span><span class="n">Result</span><span class="p">;</span>
+<span class="kt">dynamic</span> <span class="n">responseObj</span> <span class="p">=</span> <span class="n">JsonConvert</span><span class="p">.</span><span class="n">DeserializeObject</span><span class="p">&lt;</span><span class="kt">dynamic</span><span class="p">&gt;(</span><span class="n">resultTxt</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">responseObj</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
+
+</code></pre>
+<p><code>POST /Deroster</code></p>
+
+<h3 id="delreq-parameters">Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+</tbody></table>
+
+<h2 id="CAQH-ProView-RosterAPI-DerosterPOST-responses">Responses</h2>
+
+<blockquote>
+<p>Example responses</p>
+
+<p>200 Response</p>
+</blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"Provider_First_Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Middle_Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Last_Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Name_Suffix"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Address1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Address2"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Address_City"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Address_State"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Address_Zip"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Address_Zip_Extn"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Phone"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Fax"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Practice_State"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Birthdate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-09-11"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_SSN*"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Short_SSN"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_DEA*"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_UPIN*"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_Tax_ID"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_NPI*"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_License_State"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Provider_License_Number"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"PO_Provider_ID"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Last_Recredential_Date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-09-11"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Next_Recredential_Date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-09-11"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Delegation_Flag"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Application_Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Affiliation_Flag"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Region_ID"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Organization_ID"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+    </span><span class="err">'batch_id'</span><span class="p">:</span><span class="err">'string'</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<blockquote>
+<p>400 and 401 Response</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="err">'Message'</span><span class="p">:</span><span class="err">'error'</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>If your request has been formatted correctly, it will return a batch id and a 200 response code.  If not, the response object will have a &quot;Message&quot; field that will contain the error.</p>
+
+<table><thead>
+<tr>
+<th>Status</th>
+<th>Meaning</th>
+<th>Description</th>
+<th>Schema</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>200</td>
+<td><a href="https://tools.ietf.org/html/rfc7231#section-6.3.1">OK</a></td>
+<td>200 Response returns a batch ID.</td>
+<td><a href="#schemarosterresponse">RosterResponse</a></td>
+</tr>
+</tbody></table>
+
+<h2 id="CAQH-ProView-RosterAPI-DerosterPOST-next-step">Next Steps</h2>
+
+<blockquote>
+<p>Parsing the response</p>
+</blockquote>
+<pre class="highlight python tab-python"><code>
+<span class="n">batch_Id</span> <span class="o">=</span> <span class="s">""</span>
+
+<span class="k">if</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_Code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">):</span>
+    <span class="n">batch_Id</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s">"batch_Id"</span><span class="p">]</span>
+
+
+</code></pre><pre class="highlight csharp tab-csharp"><code>
+<span class="kt">string</span> <span class="n">batch_Id</span> <span class="p">=</span> <span class="s">""</span><span class="p">;</span>
+
+<span class="k">if</span> <span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="n">result</span><span class="p">.</span><span class="n">StatusCode</span> <span class="p">==</span> <span class="m">200</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">batch_Id</span> <span class="p">=</span> <span class="n">responseObj</span><span class="p">.</span><span class="n">batch_Id</span><span class="p">;</span>
+
+<span class="p">}</span>
+
+</code></pre><pre class="highlight java tab-java"><code>
+<span class="n">String</span> <span class="n">batch_Id</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+
+<span class="k">if</span> <span class="o">(</span><span class="n">response</span><span class="o">.</span><span class="na">getStatusLine</span><span class="o">().</span><span class="na">getStatusCode</span><span class="o">()</span> <span class="o">==</span> <span class="mi">200</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="n">batch_Id</span> <span class="o">=</span> <span class="n">responseJson</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">"batch_Id"</span><span class="o">);</span>
+
+<span class="o">}</span>
+
+</code></pre><h3 id='see-also-4'>See also:</h3>
+<ul>
+<li><a href="#todo">Update Roster</a></li>
+<li><a href="#todo">Delete Roster</a></li>
+<li><a href="#todo">Roster Quick Add</a></li>
+</ul>
+<h1 id='schemas'>Schemas</h1>
+<h2 id="tocSprovider">Provider</h2>
+
+<p><a id="schemaprovider"></a></p>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Required"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"middle_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Optional"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Required"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"name_suffix"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Optional"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Required (M/F)"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"address1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Required"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"address2"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Optional"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Required"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Required"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"zip"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Required"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"zip_extn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Optional"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Optional"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"fax"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Optional"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Optional"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"practice_state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Required"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"birthdate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Required (YYYYMMDD)"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"ssn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"One required*"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"short_ssn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Optional"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"dea"</span><span class="p">:</span><span class="w"> </span><span class="s2">"One required*"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"upin"</span><span class="p">:</span><span class="w"> </span><span class="s2">"One required*"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Required"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"tax_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Optional"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"npi"</span><span class="p">:</span><span class="w"> </span><span class="s2">"One required*"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"license_state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Required if license_number"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"license_number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"One required*"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 
 </span></code></pre><h3 id='properties'>Properties</h3>
@@ -279,201 +1384,550 @@ Authorization
 </tr>
 </thead><tbody>
 <tr>
-<td>Provider_First_Name</td>
+<td>first_name</td>
 <td>string</td>
 <td>true</td>
 <td>A text field that contains the First Name of the Provider</td>
 </tr>
 <tr>
-<td>Provider_Middle_Name</td>
+<td>middle_name</td>
 <td>string</td>
 <td>false</td>
 <td>A text field that contains the Middle Name or Initial of the Provider</td>
 </tr>
 <tr>
-<td>Provider_Last_Name</td>
+<td>last_name</td>
 <td>string</td>
 <td>true</td>
 <td>A text field that contains the Last Name of the Provider.</td>
 </tr>
 <tr>
-<td>Provider_Name_Suffix</td>
+<td>name_suffix</td>
 <td>string</td>
 <td>false</td>
 <td>A text field that contains the suffix associated with a Provider’s Name Note: The value must be from the list of standard suffix values. See Appendix below.</td>
 </tr>
 <tr>
-<td>Provider_Gender</td>
+<td>gender</td>
 <td>string</td>
 <td>false</td>
 <td>A code that denotes the gender of the Provider.</td>
 </tr>
 <tr>
-<td>Provider_Address1</td>
+<td>address1</td>
 <td>string</td>
 <td>true</td>
 <td>This field should contain the first line of the address at which the provider can be reached by ProView for correspondence.</td>
 </tr>
 <tr>
-<td>Provider_Address2</td>
+<td>address2</td>
 <td>string</td>
 <td>false</td>
 <td>A field that contains provider’s correspondence address Line 2</td>
 </tr>
 <tr>
-<td>Provider_Address_City</td>
+<td>city</td>
 <td>string</td>
 <td>true</td>
 <td>A field that denotes the provider’s correspondence address city</td>
 </tr>
 <tr>
-<td>Provider_Address_State</td>
+<td>state</td>
 <td>string</td>
 <td>true</td>
 <td>The two-character ANSI state code that corresponds to the provider’s correspondence address state</td>
 </tr>
 <tr>
-<td>Provider_Address_Zip</td>
-<td>integer</td>
+<td>zip</td>
+<td>string</td>
 <td>true</td>
 <td>A numeric field that denotes a provider’s correspondence address zip code</td>
 </tr>
 <tr>
-<td>Provider_Address_Zip_Extn</td>
-<td>integer</td>
+<td>zip_extn</td>
+<td>string</td>
 <td>false</td>
 <td>An integer field that denotes a provider’s correspondence address zip extension</td>
 </tr>
 <tr>
-<td>Provider_Phone</td>
-<td>integer</td>
+<td>phone</td>
+<td>string</td>
 <td>false</td>
 <td>A field that denotes a provider’s primary phone number.</td>
 </tr>
 <tr>
-<td>Provider_Fax</td>
+<td>fax</td>
 <td>string</td>
 <td>false</td>
 <td>A field that denotes a provider’s fax number for correspondence.</td>
 </tr>
 <tr>
-<td>Provider_Email</td>
+<td>email</td>
 <td>string</td>
 <td>false</td>
 <td>The primary email address used for correspondence with the provider and for provider outreach.</td>
 </tr>
 <tr>
-<td>Provider_Practice_State</td>
+<td>practice_state</td>
 <td>string</td>
 <td>true</td>
 <td>The two-character ANSI state code that corresponds to the provider’s primary practice state. Note: This helps ProView identify state mandated requirements (if any) for the provider.</td>
 </tr>
 <tr>
-<td>Provider_Birthdate</td>
-<td>string(date)</td>
+<td>birthdate</td>
+<td>string</td>
 <td>true</td>
 <td>This field denotes the provider’s date of birth. (Format:  YYYYMMDD)</td>
 </tr>
 <tr>
-<td>Provider_SSN*</td>
+<td>ssn</td>
 <td>string</td>
 <td>false</td>
 <td>This field denotes the provider’s Social Security Number (Must be 9 digits).</td>
 </tr>
 <tr>
-<td>Provider_Short_SSN</td>
+<td>short_ssn</td>
 <td>string</td>
 <td>false</td>
-<td>This field denotes last two Characters of the provider’s SSN. This is required for Illinois providers if all of the following are true: -    Primary Practice State = ‘IL’ - Provider_SSN is null  Application_Type=’2’ for re-credentialing.</td>
+<td>This field denotes last two Characters of the provider’s SSN. This is required for Illinois providers if all of the following are true: - Primary Practice State = ‘IL’ - Provider_SSN is null  Application_Type=’2’ for re-credentialing.</td>
 </tr>
 <tr>
-<td>Provider_DEA*</td>
+<td>dea</td>
 <td>string</td>
 <td>false</td>
 <td>This field denotes the provider’s Drug Enforcement Administration (DEA) Number (Format must be ‘AA9999999’)</td>
 </tr>
 <tr>
-<td>Provider_UPIN*</td>
+<td>upin</td>
 <td>string</td>
 <td>false</td>
 <td>This field denotes the provider’s Unique Physician Identification Number (UPIN) (Format must be ‘A99999’)</td>
 </tr>
 <tr>
-<td>Provider_Type</td>
+<td>type</td>
 <td>string</td>
 <td>true</td>
 <td>This field denotes the provider type code based on a list of Standard or Allied provider type codes from ProView. Note: The value must be from the list of standard ProView Provider Type codes. See Appendix below for a list of valid values.</td>
 </tr>
 <tr>
-<td>Provider_Tax_ID</td>
-<td>integer</td>
+<td>tax_id</td>
+<td>string</td>
 <td>false</td>
 <td>This field denotes the Federal Tax ID number of the provider.</td>
 </tr>
 <tr>
-<td>Provider_NPI*</td>
-<td>integer</td>
+<td>npi</td>
+<td>string</td>
 <td>true</td>
 <td>The field denotes the provider’s Type 1 (Individual) NPI number.  (Format: 9 numeric digits followed by one numeric check digit; must be 10 digits)</td>
 </tr>
 <tr>
-<td>Provider_License_State</td>
+<td>license_state</td>
 <td>string</td>
 <td>false</td>
 <td>The two-Character ANSI state code that corresponds to the provider’s license state This field is required if Provider License Number is populated.</td>
 </tr>
 <tr>
-<td>Provider_License_Number</td>
-<td>integer</td>
+<td>license_number</td>
+<td>integer(int32)</td>
 <td>false</td>
 <td>This field denotes the provider’s State License Number. The field is required if Provider License State is populated.</td>
 </tr>
+</tbody></table>
+
+<h2 id="tocSproviderrequest">ProviderRequest</h2>
+
+<p><a id="schemaproviderrequest"></a></p>
+<pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"provider"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Required"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"middle_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Optional"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Required"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name_suffix"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Optional"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Required (M/F)"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"address1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Required"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"address2"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Optional"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Required"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Required"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"zip"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Required"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"zip_extn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Optional"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Optional"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"fax"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Optional"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Optional"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"practice_state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Required"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"birthdate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Required (YYYYMMDD)"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"ssn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"One required*"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"short_ssn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Optional"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"dea"</span><span class="p">:</span><span class="w"> </span><span class="s2">"One required*"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"upin"</span><span class="p">:</span><span class="w"> </span><span class="s2">"One required*"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Required"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"tax_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Optional"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"npi"</span><span class="p">:</span><span class="w"> </span><span class="s2">"One required*"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"license_state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Required if license_number"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"license_number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"One required*"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"caqh_provider_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Required"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"po_provider_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Optional"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"last_recredential_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Optional (YYYYMMDD)"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"next_recredential_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Optional (YYYYMMDD)"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"delegation_flag"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Optional"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"application_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Conditional - see description"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"affiliation_flag"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Optional"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"organization_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Required"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"region_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Optional"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"anniversary_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"exception_description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+
+</span></code></pre>
+<p><em>Roster Insert Request</em></p>
+<h3 id='properties-2'>Properties</h3>
+<table><thead>
 <tr>
-<td>PO_Provider_ID</td>
-<td>integer</td>
+<th>Name</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Roster Insert Request</td>
+<td>[object]</td>
 <td>false</td>
-<td>This field denotes the Participating Organization’s internal identifier for the provider.</td>
+<td>none</td>
 </tr>
 <tr>
-<td>Last_Recredential_Date</td>
-<td>string(date)</td>
+<td>provider</td>
+<td><a href="#schemaprovider">Provider</a></td>
 <td>false</td>
-<td>This field denotes the date the provider was last recredentialed by the Participating Organization  (Format: YYYYMMDD)</td>
+<td>none</td>
 </tr>
 <tr>
-<td>Next_Recredential_Date</td>
-<td>string(date)</td>
-<td>false</td>
-<td>This field denotes the date the provider will be recredentialed again by the Participating organization (Format: YYYYMMDD)</td>
-</tr>
-<tr>
-<td>Delegation_Flag</td>
+<td>caqh_provider_id</td>
 <td>string</td>
 <td>false</td>
-<td>A flag that identifies if a provider is delegated or not for credentialing purposes.   Delegated Providers are providers who furnish health care services through partnerships, associations or other legal entities including but not limited to individual practice associations (IPAs) and physician hospital organizations (PHOs). Valid values are ‘Y’ – Delegated  or ‘N’ – Not Delegated</td>
+<td>none</td>
 </tr>
 <tr>
-<td>Application_Type</td>
+<td>po_provider_id</td>
 <td>string</td>
 <td>false</td>
-<td>Identifies if a provider requires an initial application or a recred application (applicable only for Illinois providers). •   Valid values are 1 or 2: 1 = “Initial Credentialing”, 2 = “Re-credentialing”  Required if Primary Practice State = ‘IL’</td>
+<td>none</td>
 </tr>
 <tr>
-<td>Affiliation_Flag</td>
+<td>last_recredential_date</td>
 <td>string</td>
 <td>false</td>
-<td>The field denotes if the provider has entered into an agreement with the Participating Organization or currently on their network. Valid values are ‘A’ – Participating (par)  or ‘NA’ – Non-participating (non-par)</td>
+<td>none</td>
 </tr>
 <tr>
-<td>Region_ID</td>
-<td>integer</td>
+<td>next_recredential_date</td>
+<td>string</td>
 <td>false</td>
-<td>This field denotes a Participating organization’s region identifier. Region ID is an identifier assigned by ProView to assist large organizations in decentralizing ProView usage based on regional demographics.</td>
+<td>none</td>
 </tr>
 <tr>
-<td>Organization_ID</td>
-<td>integer(int32)</td>
-<td>true</td>
-<td>This field denotes Participating Organization Identifier. This is a CAQH assigned identifier for each Participating Organization at the time of contracting.</td>
+<td>delegation_flag</td>
+<td>string</td>
+<td>false</td>
+<td>none</td>
+</tr>
+<tr>
+<td>application_type</td>
+<td>string</td>
+<td>false</td>
+<td>none</td>
+</tr>
+<tr>
+<td>affiliation_flag</td>
+<td>string</td>
+<td>false</td>
+<td>none</td>
+</tr>
+<tr>
+<td>organization_id</td>
+<td>string</td>
+<td>false</td>
+<td>none</td>
+</tr>
+<tr>
+<td>region_id</td>
+<td>string</td>
+<td>false</td>
+<td>none</td>
+</tr>
+<tr>
+<td>anniversary_date</td>
+<td>string</td>
+<td>false</td>
+<td>none</td>
+</tr>
+<tr>
+<td>exception_description</td>
+<td>string</td>
+<td>false</td>
+<td>none</td>
+</tr>
+</tbody></table>
+
+<h2 id="tocSrosterresponse">RosterResponse</h2>
+
+<p><a id="schemarosterresponse"></a></p>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"batch_Id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span></code></pre>
+<p><em>Roster OperationResponse</em></p>
+<h3 id='properties-3'>Properties</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>batch_Id</td>
+<td>string</td>
+<td>false</td>
+<td>none</td>
+</tr>
+</tbody></table>
+
+<h2 id="tocSrostererrorreponse">RosterErrorReponse</h2>
+
+<p><a id="schemarostererrorreponse"></a></p>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"Message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span></code></pre>
+<p><em>Roster Error Reponse</em></p>
+<h3 id='properties-4'>Properties</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Message</td>
+<td>string</td>
+<td>false</td>
+<td>none</td>
+</tr>
+</tbody></table>
+
+<h2 id="tocSresultresponse">ResultResponse</h2>
+
+<p><a id="schemaresultresponse"></a></p>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"batch_status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"batch_time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"roster_result"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span></code></pre>
+<p><em>Roster Result Response</em></p>
+<h3 id='properties-5'>Properties</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>batch_status</td>
+<td>string</td>
+<td>false</td>
+<td>none</td>
+</tr>
+<tr>
+<td>batch_time</td>
+<td>string</td>
+<td>false</td>
+<td>none</td>
+</tr>
+<tr>
+<td>roster_result</td>
+<td><a href="#schemaaddrequest">AddRequest</a></td>
+<td>false</td>
+<td>none</td>
+</tr>
+</tbody></table>
+
+<h2 id="tocSrosterupdate">RosterUpdate</h2>
+
+<p><a id="schemarosterupdate"></a></p>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"organization_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"caqh_provider_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"po_provider_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"last_recredential_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"next_recredential_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"delegation_flag"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"application_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"affiliation_flag"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span></code></pre>
+<p><em>Update Roster Request</em></p>
+<h3 id='properties-6'>Properties</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>organization_id</td>
+<td>string</td>
+<td>false</td>
+<td>none</td>
+</tr>
+<tr>
+<td>caqh_provider_id</td>
+<td>string</td>
+<td>false</td>
+<td>none</td>
+</tr>
+<tr>
+<td>po_provider_id</td>
+<td>string</td>
+<td>false</td>
+<td>none</td>
+</tr>
+<tr>
+<td>last_recredential_date</td>
+<td>string</td>
+<td>false</td>
+<td>none</td>
+</tr>
+<tr>
+<td>next_recredential_date</td>
+<td>string</td>
+<td>false</td>
+<td>none</td>
+</tr>
+<tr>
+<td>delegation_flag</td>
+<td>string</td>
+<td>false</td>
+<td>none</td>
+</tr>
+<tr>
+<td>application_type</td>
+<td>string</td>
+<td>false</td>
+<td>none</td>
+</tr>
+<tr>
+<td>affiliation_flag</td>
+<td>string</td>
+<td>false</td>
+<td>none</td>
+</tr>
+</tbody></table>
+
+<h2 id="tocSrosterupdaterequest">RosterUpdateRequest</h2>
+
+<p><a id="schemarosterupdaterequest"></a></p>
+<pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"organization_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"caqh_provider_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"po_provider_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"last_recredential_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"next_recredential_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"delegation_flag"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"application_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"affiliation_flag"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+
+</span></code></pre><h3 id='properties-7'>Properties</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>anonymous</em></td>
+<td>[<a href="#schemarosterupdate">RosterUpdate</a>]</td>
+<td>false</td>
+<td>none</td>
+</tr>
+</tbody></table>
+
+<h2 id="tocSrosterdelete">RosterDelete</h2>
+
+<p><a id="schemarosterdelete"></a></p>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"organization_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"caqh_provider_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span></code></pre>
+<p><em>Delete Request</em></p>
+<h3 id='properties-8'>Properties</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>organization_id</td>
+<td>string</td>
+<td>false</td>
+<td>none</td>
+</tr>
+<tr>
+<td>caqh_provider_id</td>
+<td>string</td>
+<td>false</td>
+<td>none</td>
+</tr>
+</tbody></table>
+
+<h2 id="tocSrosterdeleterequest">RosterDeleteRequest</h2>
+
+<p><a id="schemarosterdeleterequest"></a></p>
+<pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"organization_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"caqh_provider_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+
+</span></code></pre><h3 id='properties-9'>Properties</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>anonymous</em></td>
+<td>[<a href="#schemarosterdelete">RosterDelete</a>]</td>
+<td>false</td>
+<td>none</td>
 </tr>
 </tbody></table>
